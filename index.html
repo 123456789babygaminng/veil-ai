@@ -1920,7 +1920,7 @@
   <div class="toast-stack" id="toasts"></div>
 
   <script>
-    const API_BASE = "https://ai-beta-five-25.vercel.app";
+    const API_BASE = "https://unlimited.surf";
     const STORE = {
       chats: "veil_html_chats",
       active: "veil_html_active",
@@ -2283,7 +2283,7 @@
           : { message: prompt, model: selectedModel, customInstructions: settings.instructions, effort: settings.effort, conversation: conversationFor(chat), memoryToken: `veil-html-${chat.id}`, remember: true };
       lastReport = { prompt, endpoint, model: modeModel, chatId: chat.id, assistantIndex: index };
       try {
-        const res = await fetch(`${API_BASE}${endpoint}`, {
+        const requestStream = () => fetch(`${API_BASE}${endpoint}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -2292,6 +2292,19 @@
           body: JSON.stringify(body),
           signal: controller.signal
         });
+        let res = await requestStream();
+        if (res.status === 401) {
+          try {
+            const authError = await res.clone().json();
+            const freshKey = authError?.auth?.key || "";
+            if (freshKey) {
+              apiKey = freshKey;
+              localStorage.setItem(STORE.api, apiKey);
+              res = await requestStream();
+            }
+          } catch {
+          }
+        }
         if (!res.ok) throw new Error(await res.text());
         if (!res.body) throw new Error("No response stream.");
         const reader = res.body.getReader();
@@ -2310,8 +2323,11 @@
         setStatus("Done");
       } catch (err) {
         if (err.name !== "AbortError") {
-          assistant.content += `\n\n[Stream interrupted: ${err.message || "Connection error"}]`;
-          toast("Stream interrupted; partial answer kept.");
+          const message = err.message === "Failed to fetch"
+            ? "VEIL could not reach the chat server. Please refresh and try again."
+            : `VEIL could not finish this response. ${err.message || "Connection error"}`;
+          assistant.content += assistant.content.trim() ? `\n\n${message}` : message;
+          toast("Connection interrupted.");
           setStatus("Interrupted");
         }
       } finally {
