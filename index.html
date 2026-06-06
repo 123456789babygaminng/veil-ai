@@ -69,6 +69,7 @@
   </script>
   <style>
     :root {
+      --app-height: 100dvh;
       color-scheme: light;
       --cream: #fff2e8;
       --cream-deep: #f3d2c0;
@@ -162,7 +163,7 @@
     ::selection { background: rgba(255, 106, 20, 0.22); }
 
     .veil-app {
-      height: 100dvh;
+      height: var(--app-height);
       padding: 16px;
       isolation: isolate;
       overflow: hidden;
@@ -171,7 +172,7 @@
     .shell {
       width: min(1460px, 100%);
       margin: 0 auto;
-      height: calc(100dvh - 32px);
+      height: calc(var(--app-height) - 32px);
       display: grid;
       grid-template-rows: auto 1fr;
       gap: 14px;
@@ -219,11 +220,20 @@
       box-shadow: 0 12px 30px rgba(255, 106, 20, 0.28), inset 0 0 18px rgba(255, 255, 255, 0.46);
       flex: 0 0 auto;
       animation: logoPulse 4s ease-in-out infinite;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95), transparent 18%),
+        linear-gradient(155deg, #ffb16b 0 16%, #ff7b1f 34%, #f04d05 58%, #a93404 100%);
     }
 
-    .veil-logo img {
+    .veil-logo::before {
+      display: block;
       width: 100%;
       height: 100%;
+      content: "";
+      background:
+        linear-gradient(160deg, transparent 20%, rgba(255,255,255,.86) 31%, transparent 43%),
+        linear-gradient(15deg, transparent 35%, rgba(255,245,229,.72) 47%, transparent 58%);
+      filter: blur(.2px);
     }
 
     .top-center {
@@ -662,8 +672,7 @@
 
     .prompt-tile,
     .reliability-card,
-    .model-card,
-    .tool-card {
+    .model-card {
       border: 1px solid rgba(255, 255, 255, 0.76);
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.46);
@@ -673,8 +682,7 @@
 
     .prompt-tile:hover,
     .reliability-card:hover,
-    .model-card:hover,
-    .tool-card:hover {
+    .model-card:hover {
       transform: translateY(-2px);
       border-color: rgba(255, 106, 20, 0.28);
       background: rgba(255, 255, 255, 0.58);
@@ -778,12 +786,6 @@
       background: rgba(255, 255, 255, 0.52);
       color: var(--orange);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
-    }
-
-    .avatar img {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
     }
 
     .message.user .avatar {
@@ -1120,12 +1122,39 @@
       text-transform: uppercase;
     }
 
-    .provider-head img,
-    .model-btn img {
+    .provider-mark {
       width: 18px;
       height: 18px;
-      object-fit: contain;
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      color: #1b0b06;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
     }
+
+    .provider-mark.openai {
+      border-radius: 999px;
+      border: 2px solid currentColor;
+      font-size: 0;
+    }
+
+    .provider-mark.openai::before {
+      width: 7px;
+      height: 7px;
+      border: 2px solid currentColor;
+      border-radius: 999px;
+      content: "";
+    }
+
+    .provider-mark.google,
+    .provider-mark.xai,
+    .provider-mark.alibaba {
+      font-size: 16px;
+    }
+
+    .provider-mark.anthropic { font-size: 14px; }
 
     .provider-head .count {
       margin-left: auto;
@@ -1179,39 +1208,6 @@
       font-size: 9px;
       font-weight: 900;
       text-transform: uppercase;
-    }
-
-    .tool-stack {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .tool-card {
-      min-height: 72px;
-      padding: 11px;
-    }
-
-    .tool-card svg {
-      width: 18px;
-      height: 18px;
-      color: var(--orange);
-    }
-
-    .tool-card strong {
-      display: block;
-      margin-top: 8px;
-      color: var(--ink);
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .tool-card span {
-      display: block;
-      margin-top: 3px;
-      color: var(--quiet);
-      font-size: 10px;
-      font-weight: 800;
     }
 
     .modal {
@@ -1333,11 +1329,6 @@
     }
 
     .check-model input { accent-color: var(--orange); }
-
-    .check-model img {
-      width: 18px;
-      height: 18px;
-    }
 
     .check-model span {
       overflow: hidden;
@@ -1539,7 +1530,7 @@
 
     @media (max-width: 860px) {
       .veil-app { padding: 0; }
-      .shell { width: 100%; height: 100dvh; gap: 0; }
+      .shell { width: 100%; height: var(--app-height); gap: 0; }
       .topbar {
         position: sticky;
         top: 0;
@@ -1550,12 +1541,11 @@
       .top-center { display: none; }
       .brand span { display: none; }
       .veil-logo { width: 38px; height: 38px; }
-      .top-actions .icon-btn:nth-child(2),
       .top-actions .primary-btn { display: none; }
       .mobile-rail-toggle { display: grid; }
       .workspace {
         display: block;
-        height: calc(100dvh - 64px);
+        height: calc(var(--app-height) - 64px);
         min-height: 0;
       }
       .rail {
@@ -1569,7 +1559,10 @@
       }
       .rail.open { transform: translateX(0); }
       .studio {
-        min-height: calc(100dvh - 64px);
+        height: calc(var(--app-height) - 64px);
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
         border-radius: 0;
         border-left: 0;
         border-right: 0;
@@ -1578,8 +1571,8 @@
         display: none;
       }
       .hero-stage {
-        min-height: 260px;
-        padding: 28px 20px 18px;
+        min-height: 268px;
+        padding: 28px 20px 20px;
       }
       .hero-stage::before {
         top: -54px;
@@ -1587,10 +1580,24 @@
         width: min(88vw, 360px);
       }
       .hero-copy h1 {
-        font-size: clamp(48px, 17vw, 74px);
+        font-size: clamp(54px, 16vw, 72px);
       }
       .hero-copy h2 {
-        font-size: clamp(25px, 7.2vw, 34px);
+        font-size: clamp(25px, 6.6vw, 32px);
+        max-width: 340px;
+      }
+      .hero-copy p {
+        max-width: 340px;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .badge-row {
+        gap: 8px;
+      }
+      .soft-badge {
+        min-height: 36px;
+        padding: 0 13px;
+        font-size: 12px;
       }
       .empty-card,
       .api-grid {
@@ -1601,19 +1608,88 @@
         grid-template-columns: 1fr;
       }
       .chat-canvas {
-        padding: 16px 14px 22px;
+        padding: 14px 14px 18px;
+        min-height: 0;
       }
       .composer-zone {
-        padding: 12px 12px calc(14px + env(safe-area-inset-bottom));
+        padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+        flex: 0 0 auto;
       }
+      .active-stack { margin-bottom: 6px; }
+      .active-chip { min-height: 25px; font-size: 10px; }
       .composer-inner {
         grid-template-columns: 1fr auto;
+        gap: 7px;
+        padding: 8px;
       }
       .tool-mini {
         display: none;
       }
+      #prompt {
+        min-height: 40px;
+        max-height: 116px;
+        font-size: 15px;
+        padding: 9px 4px;
+      }
+      .send-btn,
+      .stop-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+      }
       .hint-row {
         display: none;
+      }
+      .messages {
+        width: 100%;
+      }
+      .message {
+        grid-template-columns: 38px minmax(0, 1fr);
+        gap: 9px;
+        margin-bottom: 12px;
+      }
+      .message.user {
+        grid-template-columns: minmax(0, 1fr) 38px;
+      }
+      .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 13px;
+      }
+      .bubble {
+        max-width: 100%;
+        padding: 12px 13px;
+        border-radius: 15px;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .meta {
+        gap: 7px;
+        margin-bottom: 5px;
+        font-size: 10px;
+      }
+      .msg-actions {
+        gap: 5px;
+      }
+      .msg-action {
+        height: 27px;
+        padding: 0 8px;
+        font-size: 10px;
+      }
+      body.has-messages .studio {
+        grid-template-rows: 0 minmax(0, 1fr) auto;
+      }
+      body.has-messages .hero-stage {
+        min-height: 0;
+        height: 0;
+        padding: 0;
+        border: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      body.has-messages .chat-canvas {
+        padding-top: 12px;
       }
     }
   </style>
@@ -1624,20 +1700,16 @@
       <header class="topbar glass">
         <button id="railToggle" class="icon-btn mobile-rail-toggle" type="button" title="Open history"><i data-lucide="menu"></i></button>
         <a class="brand" href="#" aria-label="VEIL">
-          <span class="veil-logo"><img src="veil-app/logos/veil.svg" alt="" /></span>
+          <span class="veil-logo" aria-hidden="true"></span>
           <span>VEIL</span>
         </a>
         <nav class="top-center" aria-label="Workspace">
           <button class="nav-chip active" type="button" data-scroll-target="chat"><i data-lucide="message-square"></i>Chat</button>
-          <button class="nav-chip" type="button" data-scroll-target="models"><i data-lucide="sparkles"></i>Models</button>
-          <button class="nav-chip" type="button" data-open="api"><i data-lucide="terminal-square"></i>API</button>
           <button class="nav-chip" type="button" data-open="settings"><i data-lucide="sliders-horizontal"></i>Settings</button>
         </nav>
         <div class="top-actions">
           <button id="shareBtn" class="icon-btn" type="button" title="Share chat"><i data-lucide="share-2"></i></button>
-          <button class="icon-btn" type="button" data-open="feedback" title="Feedback"><i data-lucide="message-circle"></i></button>
           <button class="icon-btn" type="button" data-open="settings" title="Settings"><i data-lucide="settings"></i></button>
-          <a class="primary-btn" href="downloads/VEIL-Setup.exe" download="VEIL-Setup.exe"><i data-lucide="download"></i>Download VEIL</a>
         </div>
       </header>
 
@@ -1659,7 +1731,6 @@
           </div>
           <div class="history" id="historyList"></div>
           <div class="rail-footer">
-            <button class="pill-btn" type="button" data-open="api"><i data-lucide="key-round"></i><span id="apiPill">API key</span></button>
             <button class="icon-btn" type="button" data-open="import" title="Import"><i data-lucide="copy-plus"></i></button>
             <button class="icon-btn" type="button" data-open="feedback" title="Feedback"><i data-lucide="bug"></i></button>
           </div>
@@ -1715,12 +1786,6 @@
             </div>
           </div>
           <div class="model-cloud" id="modelCloud"></div>
-          <div class="tool-stack">
-            <button class="tool-card" type="button" data-tool="continue"><i data-lucide="corner-down-right"></i><strong>Continue</strong><span>Resume cut streams</span></button>
-            <button class="tool-card" type="button" data-open="api"><i data-lucide="terminal"></i><strong>API</strong><span>Chat, search, merge</span></button>
-            <button class="tool-card" type="button" data-tool="regenerate"><i data-lucide="refresh-cw"></i><strong>Regenerate</strong><span>Retry last turn</span></button>
-            <button class="tool-card" type="button" data-open="settings"><i data-lucide="sliders-horizontal"></i><strong>Settings</strong><span>Effort and memory</span></button>
-          </div>
         </aside>
       </main>
     </div>
@@ -1959,6 +2024,18 @@
       return providers[model.provider] || { name: "Custom", logo: "veil.svg", color: "#ff6a14" };
     }
 
+    function providerMark(providerId) {
+      const label = {
+        openai: "",
+        anthropic: "AI",
+        google: "◆",
+        xai: "X",
+        alibaba: "Q",
+        custom: "V"
+      }[providerId] ?? "V";
+      return `<span class="provider-mark ${escapeHtml(providerId)}" aria-hidden="true">${escapeHtml(label)}</span>`;
+    }
+
     function activeChat() {
       if (!activeId || !chats[activeId]) return null;
       return chats[activeId];
@@ -2057,9 +2134,9 @@
       $("modelCloud").innerHTML = Array.from(groups.entries()).map(([providerId, models]) => {
         const provider = providers[providerId] || { name: "Custom", logo: "veil.svg" };
         return `<section class="provider-group">
-          <div class="provider-head"><img src="${logo(provider.logo)}" alt="" /><span>${escapeHtml(provider.name)}</span><span class="count">${models.length}</span></div>
+          <div class="provider-head">${providerMark(providerId)}<span>${escapeHtml(provider.name)}</span><span class="count">${models.length}</span></div>
           ${models.map(model => `<button class="model-btn ${model.id === selectedModel && !searchMode && !mergeMode ? "active" : ""}" type="button" data-model="${model.id}">
-            <img src="${logo(provider.logo)}" alt="" />
+            ${providerMark(model.provider)}
             <span><strong>${escapeHtml(model.name)}</strong><code>${escapeHtml(model.id)}</code></span>
             <span class="model-tier">${escapeHtml(model.tier)}</span>
           </button>`).join("")}
@@ -2073,7 +2150,7 @@
         const provider = providerFor(model);
         return `<label class="check-model">
           <input type="checkbox" value="${model.id}" />
-          <img src="${logo(provider.logo)}" alt="" />
+          ${providerMark(model.provider)}
           <span>${escapeHtml(model.name)}</span>
         </label>`;
       }).join("");
@@ -2132,7 +2209,7 @@
         <button class="msg-action" type="button" data-report="${index}"><i data-lucide="send"></i>Report error</button>
       </div>`;
       return `<article class="message ${isUser ? "user" : "assistant"}">
-        <div class="avatar">${isUser ? '<i data-lucide="user"></i>' : `<img src="${logo(provider.logo)}" alt="" />`}</div>
+        <div class="avatar">${isUser ? '<i data-lucide="user"></i>' : providerMark(model.provider)}</div>
         <div class="bubble-wrap">
           <div class="meta"><strong>${isUser ? "You" : escapeHtml(model.name)}</strong>${!isUser ? `<span class="tier">${escapeHtml(model.tier)}</span>` : ""}<span>${timeAgo(msg.timestamp)}</span></div>
           <div class="bubble">${renderMarkdown(msg.content)}${sources}${actions}</div>
@@ -2141,6 +2218,7 @@
     }
 
     function refresh() {
+      document.body.classList.toggle("has-messages", Boolean(activeChat()?.messages?.length));
       renderHistory();
       renderModels();
       renderActiveStack();
@@ -2322,6 +2400,8 @@
     }
 
     function renderApi(active = "chat") {
+      if (!apiTabs[active]) active = "chat";
+      if (!$("apiKeyText") || !$("apiTabs") || !$("apiSnippet")) return;
       $("apiKeyText").textContent = apiKey ? `${apiKey.slice(0, 8)}••••${apiKey.slice(-6)}` : "Click copy to fetch key";
       $("apiTabs").innerHTML = Object.entries(apiTabs).map(([key, value]) => `<button class="api-tab ${key === active ? "active" : ""}" type="button" data-api-tab="${key}">${value[0]}</button>`).join("");
       $("apiSnippet").textContent = apiTabs[active][1].replace(/YOUR_KEY/g, apiKey || "YOUR_KEY");
@@ -2464,6 +2544,15 @@
       $("fileInput").value = "";
     }
 
+    function syncAppHeight() {
+      const height = window.visualViewport?.height || window.innerHeight;
+      document.documentElement.style.setProperty("--app-height", `${height}px`);
+    }
+
+    window.addEventListener("resize", syncAppHeight);
+    window.visualViewport?.addEventListener("resize", syncAppHeight);
+    window.visualViewport?.addEventListener("scroll", syncAppHeight);
+
     document.addEventListener("click", event => {
       const open = event.target.closest("[data-open]");
       if (open) return openModal(open.dataset.open);
@@ -2541,7 +2630,7 @@
     $("clearSettings").addEventListener("click", clearSettings);
     $("saveCombo").addEventListener("click", saveCombo);
     $("deleteCombo").addEventListener("click", deleteSelectedCombo);
-    $("copyKey").addEventListener("click", async () => {
+    if ($("copyKey")) $("copyKey").addEventListener("click", async () => {
       const key = await ensureApiKey();
       renderApi();
       copy(key || `${API_BASE}/api/key`);
@@ -2575,6 +2664,7 @@
     });
 
     function boot() {
+      syncAppHeight();
       $("instructions").value = settings.instructions || "";
       document.querySelectorAll("[data-effort]").forEach(btn => btn.classList.toggle("active", btn.dataset.effort === settings.effort));
       if (location.hash.startsWith("#share=")) {
@@ -2591,8 +2681,8 @@
         .filter(combo => combo.models.length >= 2);
       if (!allModels().some(model => model.id === selectedModel)) selectedModel = baseModels[0].id;
       refresh();
-      $("apiPill").textContent = apiKey ? "API ready" : "API key";
       renderApi();
+      ensureApiKey().then(() => renderApi());
       setStatus("Ready");
       lucide.createIcons();
     }
