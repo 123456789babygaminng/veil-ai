@@ -11,6 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>
+    if (location.protocol !== "file:") {
+      const analyticsScript = document.createElement("script");
+      analyticsScript.defer = true;
+      analyticsScript.src = "/_vercel/insights/script.js";
+      document.head.appendChild(analyticsScript);
+    }
+  </script>
+  <script>
     window.lucide = {
       createIcons() {
         const paths = {
@@ -974,7 +982,7 @@
 
     .composer-inner {
       display: grid;
-      grid-template-columns: auto 1fr auto auto;
+      grid-template-columns: 1fr auto auto;
       align-items: end;
       gap: 8px;
       padding: 10px;
@@ -1705,7 +1713,6 @@
         </a>
         <nav class="top-center" aria-label="Workspace">
           <button class="nav-chip active" type="button" data-scroll-target="chat"><i data-lucide="message-square"></i>Chat</button>
-          <button class="nav-chip" type="button" data-open="settings"><i data-lucide="sliders-horizontal"></i>Settings</button>
         </nav>
         <div class="top-actions">
           <button id="shareBtn" class="icon-btn" type="button" title="Share chat"><i data-lucide="share-2"></i></button>
@@ -1759,7 +1766,6 @@
             <div class="active-stack" id="activeStack"></div>
             <form class="composer" id="composer">
               <div class="composer-inner">
-                <button class="tool-mini" type="button" data-open="combine" title="Combine models"><i data-lucide="git-merge"></i></button>
                 <textarea id="prompt" rows="1" placeholder="Message VEIL..."></textarea>
                 <button class="tool-mini" type="button" id="attachBtn" title="Attach note"><i data-lucide="paperclip"></i></button>
                 <input class="hidden" id="fileInput" type="file" multiple accept=".txt,.md,.markdown,.json,.csv,.js,.jsx,.ts,.tsx,.html,.css,.py,.xml,.yaml,.yml" />
@@ -1778,9 +1784,8 @@
           <div class="model-select-head">
             <div class="mini-title">
               <span>Model Orbit</span>
-              <small id="modelTotal">33 models</small>
+              <small id="modelTotal">10 models</small>
             </div>
-            <button class="icon-btn" type="button" data-open="combine" title="Create combined model"><i data-lucide="plus"></i></button>
             <div class="provider-filter">
               <input id="modelSearch" type="search" placeholder="Search models or providers..." autocomplete="off" />
             </div>
