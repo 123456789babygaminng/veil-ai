@@ -2206,15 +2206,39 @@
     }
 
     function toast(text) {
+      const stack = $("toasts");
+      Array.from(stack.children).forEach(child => {
+        if (child.textContent === text) child.remove();
+      });
       const node = document.createElement("div");
       node.className = "toast";
       node.textContent = text;
-      $("toasts").appendChild(node);
+      stack.appendChild(node);
       setTimeout(() => {
         node.style.opacity = "0";
         node.style.transform = "translateY(8px)";
         setTimeout(() => node.remove(), 220);
       }, 1900);
+    }
+
+    function feedbackAddress() {
+      return String.fromCharCode(
+        97, 97, 114, 111, 110, 115, 116, 101, 114, 110, 105, 116, 122, 107, 121, 57, 50, 49,
+        64, 103, 109, 97, 105, 108, 46, 99, 111, 109
+      );
+    }
+
+    function openFeedbackEmail(message) {
+      const subject = encodeURIComponent(`VEIL feedback: ${feedbackKind}`);
+      const body = encodeURIComponent([
+        message,
+        "",
+        `Type: ${feedbackKind}`,
+        `Path: ${location.pathname}`,
+        `Model: ${selectedModel}`,
+        `Time: ${new Date().toISOString()}`
+      ].join("\n"));
+      location.href = `mailto:${feedbackAddress()}?subject=${subject}&body=${body}`;
     }
 
     function renderMarkdown(text) {
@@ -2599,6 +2623,7 @@
     async function sendFeedback() {
       const message = $("feedbackText").value.trim();
       if (message.length < 4) return toast("Write a little more first.");
+      $("sendFeedback").disabled = true;
       try {
         const res = await fetch("/api/feedback", {
           method: "POST",
@@ -2616,7 +2641,10 @@
         closeModals();
         toast("Feedback sent.");
       } catch {
-        toast("Could not send feedback right now.");
+        openFeedbackEmail(message);
+        toast("Opening email draft.");
+      } finally {
+        $("sendFeedback").disabled = false;
       }
     }
 
