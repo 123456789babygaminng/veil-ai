@@ -1448,6 +1448,12 @@
       display: none;
     }
 
+    .mobile-model-toggle,
+    .model-close,
+    .model-scrim {
+      display: none;
+    }
+
     .empty-note {
       padding: 16px;
       color: var(--muted);
@@ -1550,7 +1556,16 @@
       .brand span { display: none; }
       .veil-logo { width: 38px; height: 38px; }
       .top-actions .primary-btn { display: none; }
-      .mobile-rail-toggle { display: grid; }
+      .mobile-rail-toggle,
+      .mobile-model-toggle { display: grid; }
+      .top-actions {
+        gap: 8px;
+      }
+      .top-actions .icon-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+      }
       .workspace {
         display: block;
         height: calc(var(--app-height) - 64px);
@@ -1575,29 +1590,115 @@
         border-left: 0;
         border-right: 0;
       }
+      .model-scrim {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        border: 0;
+        background: rgba(40, 20, 10, 0.22);
+        opacity: 0;
+        pointer-events: none;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        transition: opacity 180ms ease;
+      }
+      body.models-open .model-scrim {
+        display: none;
+        opacity: 0;
+        pointer-events: none;
+      }
       .orbit {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        z-index: 140;
+        height: min(76vh, 650px);
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        padding: 14px;
+        border-radius: 24px;
+        transform: translateY(calc(100% + 24px));
+        transition: transform 240ms cubic-bezier(.2,.8,.2,1);
+        box-shadow: 0 30px 90px rgba(68, 30, 10, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+      }
+      body.models-open .orbit {
+        transform: translateY(0);
+      }
+      .model-select-head {
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        padding-bottom: 10px;
+      }
+      .model-select-head::before {
+        grid-column: 1 / -1;
+        justify-self: center;
+        width: 46px;
+        height: 5px;
+        margin: 0 0 8px;
+        border-radius: 999px;
+        background: rgba(119, 75, 50, 0.22);
+        content: "";
+      }
+      .model-close {
+        display: grid;
+        width: 40px;
+        height: 40px;
+      }
+      .provider-filter {
+        grid-column: 1 / -1;
+      }
+      .provider-filter input {
+        height: 46px;
+        font-size: 14px;
+      }
+      .model-cloud {
+        padding: 0 2px 4px 0;
+        overscroll-behavior: contain;
+      }
+      .provider-group {
+        margin-bottom: 12px;
+      }
+      .provider-head {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 8px 2px;
+        background: linear-gradient(180deg, rgba(255, 238, 225, 0.96), rgba(255, 238, 225, 0.82));
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      .model-btn {
+        min-height: 58px;
+        grid-template-columns: 24px minmax(0, 1fr) auto;
+        border-radius: 17px;
+      }
+      .model-btn code {
         display: none;
       }
       .hero-stage {
-        min-height: 268px;
-        padding: 28px 20px 20px;
+        min-height: 218px;
+        padding: 20px 20px 16px;
       }
       .hero-stage::before {
-        top: -54px;
-        right: -128px;
-        width: min(88vw, 360px);
+        top: -72px;
+        right: -112px;
+        width: min(76vw, 320px);
       }
       .hero-copy h1 {
-        font-size: clamp(54px, 16vw, 72px);
+        margin-top: 6px;
+        font-size: clamp(46px, 14vw, 62px);
       }
       .hero-copy h2 {
-        font-size: clamp(25px, 6.6vw, 32px);
-        max-width: 340px;
+        font-size: clamp(22px, 6vw, 28px);
+        max-width: 330px;
       }
       .hero-copy p {
-        max-width: 340px;
-        font-size: 14px;
-        line-height: 1.45;
+        max-width: 328px;
+        margin-top: 9px;
+        font-size: 13px;
+        line-height: 1.38;
       }
       .badge-row {
         gap: 8px;
@@ -1611,9 +1712,25 @@
       .api-grid {
         grid-template-columns: 1fr;
       }
+      .empty-card {
+        gap: 10px;
+      }
       .prompt-grid,
       .model-check-grid {
         grid-template-columns: 1fr;
+      }
+      .prompt-tile {
+        min-height: 76px;
+        padding: 13px 14px;
+        border-radius: 15px;
+      }
+      .prompt-tile span {
+        margin-top: 5px;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+      .reliability-card {
+        display: none;
       }
       .chat-canvas {
         padding: 14px 14px 18px;
@@ -1623,8 +1740,23 @@
         padding: 10px 12px max(12px, env(safe-area-inset-bottom));
         flex: 0 0 auto;
       }
-      .active-stack { margin-bottom: 6px; }
-      .active-chip { min-height: 25px; font-size: 10px; }
+      .active-stack {
+        margin-bottom: 7px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .active-stack::-webkit-scrollbar { display: none; }
+      .active-chip {
+        min-height: 30px;
+        flex: 0 0 auto;
+        padding: 0 10px;
+        font-size: 11px;
+      }
+      .active-chip:last-child {
+        border-color: rgba(255, 106, 20, 0.28);
+        background: rgba(255, 255, 255, 0.72);
+      }
       .composer-inner {
         grid-template-columns: 1fr auto;
         gap: 7px;
@@ -1715,6 +1847,7 @@
           <button class="nav-chip active" type="button" data-scroll-target="chat"><i data-lucide="message-square"></i>Chat</button>
         </nav>
         <div class="top-actions">
+          <button id="modelToggle" class="icon-btn mobile-model-toggle" type="button" title="Choose model"><i data-lucide="sparkles"></i></button>
           <button id="shareBtn" class="icon-btn" type="button" title="Share chat"><i data-lucide="share-2"></i></button>
           <button class="icon-btn" type="button" data-open="settings" title="Settings"><i data-lucide="settings"></i></button>
         </div>
@@ -1786,6 +1919,7 @@
               <span>Model Orbit</span>
               <small id="modelTotal">10 models</small>
             </div>
+            <button id="modelClose" class="icon-btn model-close" type="button" title="Close models"><i data-lucide="x"></i></button>
             <div class="provider-filter">
               <input id="modelSearch" type="search" placeholder="Search models or providers..." autocomplete="off" />
             </div>
@@ -1796,6 +1930,7 @@
     </div>
   </div>
 
+  <button class="model-scrim" id="modelScrim" type="button" aria-label="Close models"></button>
   <div class="modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="modal-panel glass">
       <header class="modal-head">
@@ -1879,7 +2014,7 @@
       <header class="modal-head">
         <div>
           <h2 id="feedbackTitle">Send feedback</h2>
-          <p>Bug, idea, or note. Feedback is sent to the VEIL reference diagnostics endpoint when available.</p>
+          <p>Bug, idea, or note. Feedback helps improve VEIL.</p>
         </div>
         <button class="icon-btn" type="button" data-close><i data-lucide="x"></i></button>
       </header>
@@ -2166,7 +2301,7 @@
       if (searchMode) chips.push(`<span class="active-chip"><i data-lucide="globe-2"></i>Web Search</span>`);
       if (mergeMode) chips.push(`<span class="active-chip"><i data-lucide="git-merge"></i>Merge AI</span>`);
       if (settings.instructions.trim()) chips.push(`<span class="active-chip"><i data-lucide="scroll-text"></i>Instructions on</span>`);
-      chips.push(`<span class="active-chip"><i data-lucide="sparkles"></i>${escapeHtml(modelById().name)}</span>`);
+      chips.push(`<button class="active-chip" type="button" data-open-models><i data-lucide="sparkles"></i>${escapeHtml(modelById().name)}</button>`);
       $("activeStack").innerHTML = chips.join("");
       $("searchToggle").classList.toggle("on", searchMode);
       $("mergeToggle").classList.toggle("on", mergeMode);
@@ -2465,10 +2600,16 @@
       const message = $("feedbackText").value.trim();
       if (message.length < 4) return toast("Write a little more first.");
       try {
-        const res = await fetch(`${API_BASE}/_diag/echo`, {
+        const res = await fetch("/api/feedback", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: feedbackKind, message, path: location.pathname, website: "" })
+          body: JSON.stringify({
+            type: feedbackKind,
+            message,
+            path: location.pathname,
+            model: selectedModel,
+            timestamp: new Date().toISOString()
+          })
         });
         if (!res.ok) throw new Error("Feedback failed.");
         $("feedbackText").value = "";
@@ -2591,10 +2732,16 @@
         selectedModel = model.dataset.model;
         searchMode = false;
         mergeMode = false;
+        document.body.classList.remove("models-open");
         return refresh();
       }
       const prompt = event.target.closest("[data-prompt]");
       if (prompt) return submitPrompt(prompt.dataset.prompt);
+      if (event.target.closest("[data-open-models]")) {
+        $("rail").classList.remove("open");
+        document.body.classList.add("models-open");
+        return setTimeout(() => $("modelSearch").focus(), 80);
+      }
       if (event.target.closest("[data-regenerate]")) return regenerate();
       if (event.target.closest("[data-continue]") || event.target.closest('[data-tool="continue"]')) return continueLast();
       if (event.target.closest('[data-tool="regenerate"]')) return regenerate();
@@ -2646,6 +2793,13 @@
     $("chatSearch").addEventListener("input", renderHistory);
     $("modelSearch").addEventListener("input", renderModels);
     $("railToggle").addEventListener("click", () => $("rail").classList.toggle("open"));
+    $("modelToggle").addEventListener("click", () => {
+      $("rail").classList.remove("open");
+      document.body.classList.add("models-open");
+      setTimeout(() => $("modelSearch").focus(), 80);
+    });
+    $("modelClose").addEventListener("click", () => document.body.classList.remove("models-open"));
+    $("modelScrim").addEventListener("click", () => document.body.classList.remove("models-open"));
     $("shareBtn").addEventListener("click", shareChat);
     $("saveSettings").addEventListener("click", saveSettings);
     $("clearSettings").addEventListener("click", clearSettings);
@@ -2661,7 +2815,10 @@
     $("attachBtn").addEventListener("click", () => $("fileInput").click());
     $("fileInput").addEventListener("change", event => attachFiles(event.target.files));
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeModals();
+      if (event.key === "Escape") {
+        closeModals();
+        document.body.classList.remove("models-open");
+      }
       if (event.key === "Enter" && event.target.closest(".chat-row")) {
         activeId = event.target.closest(".chat-row").dataset.chat;
         $("rail").classList.remove("open");
