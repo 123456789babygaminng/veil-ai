@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="VEIL premium landing page concept.">
+  <meta name="theme-color" content="#f6e6d8">
+  <title>VEIL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script>
+    if (location.protocol !== "file:") {
+      const analyticsScript = document.createElement("script");
+      analyticsScript.defer = true;
+      analyticsScript.src = "/_vercel/insights/script.js";
+      document.head.appendChild(analyticsScript);
+    }
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cream: #f8eadf;
+      --cream-2: #fff6ec;
+      --cream-3: #f3d6c5;
+      --ink: #150e0b;
+      --brown: #5d331f;
+      --muted: #765f52;
+      --line: rgba(255, 255, 255, 0.66);
+      --line-dark: rgba(100, 48, 18, 0.15);
+      --glass: rgba(255, 248, 240, 0.57);
+      --glass-strong: rgba(255, 250, 245, 0.72);
+      --orange: #ff6a14;
+      --orange-2: #ff9a3d;
+      --orange-3: #d94908;
+      --blue: #0876f1;
+      --green: #42b233;
+      --shadow: 0 28px 80px rgba(118, 67, 37, 0.2);
+      --shadow-tight: 0 18px 38px rgba(141, 70, 20, 0.16);
+      --radius: 18px;
+      --max: 1180px;
+      --mx: 0px;
+      --my: 0px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
+    body {
+      min-height: 100%;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at calc(13% + var(--mx) * 0.02) 8%, rgba(255,255,255,0.82), transparent 24vw),
+        radial-gradient(circle at calc(84% + var(--mx) * -0.03) 12%, rgba(255, 129, 38, 0.25), transparent 26vw),
+        radial-gradient(circle at 48% 62%, rgba(255,255,255,0.58), transparent 32vw),
+        linear-gradient(135deg, #e8bfae 0%, #fff0e5 23%, #f7dfd0 58%, #eec8b7 100%);
+      overflow-x: hidden;
+    }
+    body::before,
+    body::after {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+    }
+    body::before {
+      z-index: -3;
+      opacity: 0.64;
+      background:
+        linear-gradient(105deg, transparent 0 38%, rgba(255,255,255,0.32) 42%, transparent 48%),
+        repeating-linear-gradient(105deg, rgba(255,255,255,0.10) 0 1px, transparent 1px 54px);
+      mask-image: radial-gradient(ellipse at center, black 0 62%, transparent 100%);
+    }
+    body::after {
+      z-index: -2;
+      opacity: 0.08;
+      background-image:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,0.62) 0 1px, transparent 1.3px),
+        radial-gradient(circle at 76% 42%, rgba(122,65,33,0.24) 0 1px, transparent 1.4px);
+      background-size: 28px 28px, 37px 37px;
+      mix-blend-mode: soft-light;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    button:not(:disabled) { cursor: pointer; }
+    img, svg { display: block; }
+    ::selection { background: rgba(255,106,20,0.22); }
+
+    .page {
+      position: relative;
+      isolation: isolate;
+      min-height: 100vh;
+      padding: 14px 16px 0;
+      overflow-x: hidden;
+    }
+    .page::before {
+      position: fixed;
+      inset: auto -10vw 31vh -10vw;
+      z-index: -1;
+      height: 31vh;
+      content: "";
+      background:
+        linear-gradient(90deg, transparent, rgba(255,255,255,0.95), transparent),
+        linear-gradient(90deg, transparent, rgba(255,111,21,0.2), transparent);
+      filter: blur(14px);
+      transform: translateY(calc(var(--my) * 0.03));
+    }
+    .shell {
+      width: min(var(--max), calc(100vw - 32px));
+      margin: 0 auto;
+    }
+
+    .glass {
+      border: 1px solid rgba(255,255,255,0.68);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.68), rgba(255,244,235,0.43)),
+        linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0.03));
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.82), inset 0 -1px 0 rgba(121,62,26,0.05);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      min-height: 74px;
+      padding: 10px 12px 10px 20px;
+      border-radius: 16px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .brand-name {
+      color: #5a2b17;
+      font-size: clamp(22px, 2.1vw, 27px);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.72);
+    }
+    .orb-mark {
+      position: relative;
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 42px;
+      height: 42px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.78);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 24% 18%, rgba(255,255,255,0.95), transparent 16%),
+        radial-gradient(circle at 70% 74%, rgba(191,54,3,0.96), transparent 35%),
+        linear-gradient(135deg, #ffb25d 0%, #ff7118 45%, #d63c04 100%);
+      box-shadow: 0 12px 28px rgba(255, 94, 12, 0.38), inset 0 2px 8px rgba(255,255,255,0.72);
+    }
+    .orb-mark::before,
+    .orb-mark::after {
+      position: absolute;
+      inset: 7px -6px auto;
+      height: 13px;
+      content: "";
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.86), transparent);
+      filter: blur(0.2px);
+      transform: rotate(18deg);
+    }
+    .orb-mark::after {
+      inset: auto -9px 8px;
+      height: 12px;
+      opacity: 0.78;
+      transform: rotate(-17deg);
+    }
+
+    .nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-self: center;
+    }
+    .nav a {
+      position: relative;
+      min-width: 98px;
+      padding: 13px 10px;
+      color: #1d1714;
+      font-size: 14px;
+      font-weight: 650;
+      text-align: center;
+      border-radius: 12px;
+      transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+    .nav a + a::before {
+      position: absolute;
+      left: -5px;
+      top: 50%;
+      width: 1px;
+      height: 19px;
+      content: "";
+      background: rgba(110, 61, 37, 0.09);
+      transform: translateY(-50%);
+    }
+    .nav a:hover {
+      color: #b8460d;
+      background: rgba(255,255,255,0.34);
+      transform: translateY(-1px);
+    }
+    .nav a.active::after {
+      position: absolute;
+      left: 50%;
+      bottom: 6px;
+      width: 4px;
+      height: 4px;
+      content: "";
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 12px rgba(255,106,20,0.95);
+      transform: translateX(-50%);
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 9px;
+    }
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 17px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: 999px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 22% 12%, rgba(255,255,255,0.56), transparent 24%),
+        linear-gradient(180deg, #ff8d2d, #f65c07 72%, #d94904);
+      box-shadow: 0 13px 31px rgba(255,91,8,0.34), inset 0 1px 0 rgba(255,255,255,0.64);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: transform 190ms ease, box-shadow 190ms ease, filter 190ms ease;
+    }
+    .btn::after {
+      position: absolute;
+      inset: -1px auto -1px -58%;
+      width: 44%;
+      content: "";
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.62), transparent);
+      transform: skewX(-20deg);
+      transition: left 520ms ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(255,91,8,0.42), inset 0 1px 0 rgba(255,255,255,0.78);
+      filter: saturate(1.04);
+    }
+    .btn:hover::after { left: 118%; }
+    .btn svg { width: 16px; height: 16px; }
+    .menu-btn {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 999px;
+      color: #5c2c18;
+      background: rgba(255,255,255,0.42);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.84);
+    }
+    .menu-btn svg {
+      width: 21px;
+      height: 21px;
+      margin: auto;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 6;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(390px, 1.1fr);
+      align-items: center;
+      min-height: 294px;
+      padding: 36px 48px 18px;
+      overflow: visible;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 3;
+      max-width: 520px;
+      transform: translateY(8px);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      color: rgba(92, 45, 22, 0.82);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      width: 7px;
+      height: 7px;
+      content: "";
+      border-radius: 999px;
+      background: #ff6a14;
+      box-shadow: 0 0 18px rgba(255,106,20,0.8);
+    }
+    h1 {
+      margin: 0;
+      color: #1d0d06;
+      font-size: clamp(64px, 8vw, 86px);
+      line-height: 0.86;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.76),
+        0 10px 26px rgba(95,43,16,0.2);
+    }
+    h1 span {
+      display: inline-block;
+      color: #1a0a04;
+      background: none;
+      -webkit-text-fill-color: #1a0a04;
+      text-shadow:
+        1px 1px 0 rgba(255,255,255,0.72),
+        5px 0 18px rgba(238, 86, 8, 0.34),
+        0 13px 24px rgba(74, 28, 8, 0.22);
+    }
+    .hero-sub {
+      margin: 4px 0 12px;
+      color: #120e0d;
+      font-size: clamp(33px, 4vw, 43px);
+      line-height: 1.06;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+    .hero-sub .warm {
+      background: linear-gradient(90deg, #37160b, #ef5f0a 38%, #bd3e06);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      max-width: 390px;
+      margin: 0;
+      color: rgba(37, 28, 24, 0.74);
+      font-size: 15px;
+      line-height: 1.48;
+      font-weight: 600;
+    }
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: 999px;
+      color: #1a1411;
+      background: rgba(255,255,255,0.42);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72), 0 10px 26px rgba(112, 61, 31, 0.1);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+    .trust-pill:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.58);
+    }
+    .trust-pill svg {
+      width: 19px;
+      height: 19px;
+      color: var(--pill-color, var(--orange));
+    }
+
+    .hero-visual {
+      position: absolute;
+      inset: 80px -42px -4px 33%;
+      z-index: 1;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .light-field {
+      position: absolute;
+      inset: 65px -10vw 0 -40vw;
+      opacity: 0.96;
+      transform: translate3d(calc(var(--mx) * -0.018), calc(var(--my) * -0.006), 0);
+    }
+    .light-field .ribbon {
+      position: absolute;
+      left: 0;
+      width: 150vw;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent 0 4%, rgba(255,255,255,0.2), rgba(255,255,255,0.95), rgba(255,168,94,0.44), rgba(255,255,255,0.86), transparent 92%);
+      box-shadow: 0 0 13px rgba(255,255,255,0.94), 0 0 26px rgba(255,112,20,0.2);
+      filter: blur(0.2px);
+      will-change: transform, opacity;
+      animation: ribbonFlow 8s ease-in-out infinite alternate;
+      transform-origin: 72% 50%;
+    }
+    .light-field .r1 { top: 92px; transform: rotate(6deg) translateX(-13vw); }
+    .light-field .r2 { top: 126px; opacity: .78; transform: rotate(1deg) translateX(-10vw); animation-delay: -1s; }
+    .light-field .r3 { top: 157px; opacity: .76; transform: rotate(-4deg) translateX(-6vw); animation-delay: -2s; }
+    .light-field .r4 { top: 190px; opacity: .64; transform: rotate(-7deg) translateX(-8vw); animation-delay: -3s; }
+    .light-field .r5 { top: 211px; height: 5px; opacity: .34; filter: blur(4px); transform: rotate(3deg) translateX(-18vw); animation-delay: -4s; }
+    .main-orb {
+      position: absolute;
+      right: 115px;
+      top: -78px;
+      width: clamp(238px, 26vw, 314px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 25% 18%, rgba(255,255,255,0.97), transparent 10%),
+        radial-gradient(ellipse at 68% 20%, rgba(255,255,255,0.92), transparent 16%),
+        radial-gradient(circle at 58% 76%, rgba(201,44,0,0.86), transparent 35%),
+        linear-gradient(138deg, rgba(255,205,129,0.9), rgba(255,116,24,0.94) 47%, rgba(220,54,0,0.98));
+      box-shadow:
+        0 0 0 5px rgba(255,255,255,0.2) inset,
+        0 0 0 12px rgba(255,255,255,0.12) inset,
+        0 34px 62px rgba(218, 74, 5, 0.38),
+        0 0 64px rgba(255, 130, 42, 0.45);
+      filter: saturate(1.08);
+      will-change: transform;
+      animation: orbFloat 7s ease-in-out infinite;
+      transform: translate3d(calc(var(--mx) * 0.014), calc(var(--my) * 0.012), 0);
+    }
+    .main-orb::before,
+    .main-orb::after {
+      position: absolute;
+      content: "";
+      border-radius: 999px;
+      pointer-events: none;
+    }
+    .main-orb::before {
+      inset: 56px -18px auto 20px;
+      height: 43px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), rgba(255,249,210,0.5), transparent);
+      filter: blur(4px);
+      transform: rotate(13deg);
+    }
+    .main-orb::after {
+      inset: auto 14px 63px -18px;
+      height: 54px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.84), rgba(255,180,82,0.3), transparent);
+      filter: blur(5px);
+      transform: rotate(-16deg);
+    }
+    .orb-ring {
+      position: absolute;
+      inset: -9px;
+      border: 2px solid rgba(255,255,255,0.52);
+      border-right-color: rgba(255,255,255,0.86);
+      border-bottom-color: rgba(255,255,255,0.24);
+      border-radius: inherit;
+      filter: blur(0.2px);
+      animation: ringDrift 12s linear infinite;
+    }
+    .orb-shadow {
+      position: absolute;
+      left: 15%;
+      right: 12%;
+      bottom: -21px;
+      height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(209,70,4,0.42), rgba(255,185,88,0.14) 44%, transparent 72%);
+      filter: blur(8px);
+    }
+    .bubble {
+      position: absolute;
+      width: var(--size);
+      aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,0.78);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 28% 22%, rgba(255,255,255,0.96), transparent 19%),
+        radial-gradient(circle at 72% 70%, rgba(255,103,23,0.36), transparent 29%),
+        rgba(255,255,255,0.16);
+      box-shadow: inset 0 0 12px rgba(255,255,255,0.7), 0 10px 27px rgba(172,76,21,0.18);
+      will-change: transform;
+      animation: bubbleFloat 7s ease-in-out infinite;
+    }
+    .b1 { --size: 40px; top: 44px; right: 442px; animation-delay: -1s; }
+    .b2 { --size: 62px; top: 185px; right: 515px; animation-delay: -2.3s; }
+    .b3 { --size: 48px; top: 37px; right: 10px; animation-delay: -3.1s; }
+    .b4 { --size: 49px; top: 258px; right: 100px; animation-delay: -4.5s; }
+
+    .section-stack {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      gap: 8px;
+      padding-bottom: 26px;
+    }
+    .panel {
+      border-radius: var(--radius);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    body.veil-motion .panel.reveal {
+      transform: translateY(18px);
+      opacity: 0;
+    }
+    body.veil-motion .panel.reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .feature-panel {
+      padding: 16px 26px 14px;
+    }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+    .panel-title h2,
+    .panel-title h3 {
+      margin: 0;
+      color: #130f0d;
+      font-size: 18px;
+      line-height: 1.1;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+    .panel-title p {
+      margin: 3px 0 0;
+      color: rgba(89, 62, 49, 0.78);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .live-note {
+      align-self: end;
+      color: rgba(97, 68, 54, 0.82);
+      font-size: 11px;
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .feature-card {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 96px;
+      padding: 12px 8px 11px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.78);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.36);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72), 0 9px 24px rgba(117,67,36,0.07);
+      text-align: center;
+      transition: transform 210ms ease, box-shadow 210ms ease, border-color 210ms ease, background 210ms ease;
+    }
+    .feature-card::before {
+      position: absolute;
+      inset: -60% -30% auto;
+      height: 95px;
+      content: "";
+      background: radial-gradient(circle, color-mix(in srgb, var(--tone) 34%, transparent), transparent 62%);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+    .feature-card:hover {
+      z-index: 2;
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.52);
+      box-shadow: 0 18px 42px rgba(117,67,36,0.14), inset 0 1px 0 rgba(255,255,255,0.86);
+    }
+    .feature-card:hover::before {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 48px;
+      color: var(--tone);
+      filter: drop-shadow(0 9px 12px color-mix(in srgb, var(--tone) 22%, transparent));
+    }
+    .feature-icon svg {
+      width: 39px;
+      height: 39px;
+      stroke-width: 2;
+    }
+    .feature-card strong {
+      margin-top: 5px;
+      color: #16110f;
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .screenshot-panel {
+      padding: 15px 26px 14px;
+    }
+    .title-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .title-badge {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      color: #fff5ed;
+      background: linear-gradient(145deg, #805036, #4a2718);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.33), 0 8px 16px rgba(80,38,18,0.18);
+    }
+    .title-badge svg { width: 17px; height: 17px; }
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 31px;
+      padding: 0 14px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 999px;
+      color: #c5480c;
+      background: rgba(255,255,255,0.32);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.78);
+      font-size: 11px;
+      font-weight: 750;
+      white-space: nowrap;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+    .ghost-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.52);
+      box-shadow: 0 12px 26px rgba(166,72,24,0.11), inset 0 1px 0 rgba(255,255,255,0.82);
+    }
+    .ghost-btn svg { width: 14px; height: 14px; }
+    .shot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .shot {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 104px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.76);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 22% 10%, rgba(255,255,255,0.72), transparent 42%),
+        rgba(255,255,255,0.24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.68);
+      transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+    }
+    .shot::before {
+      position: absolute;
+      inset: 8px;
+      content: "";
+      border: 1px dashed rgba(222,119,70,0.34);
+      border-radius: 9px;
+    }
+    .shot::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: linear-gradient(110deg, transparent, rgba(255,255,255,0.45), transparent);
+      transform: translateX(-110%);
+      transition: transform 650ms ease;
+    }
+    .shot:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.36);
+      box-shadow: 0 15px 33px rgba(117,67,36,0.12), inset 0 1px 0 rgba(255,255,255,0.78);
+    }
+    .shot:hover::after { transform: translateX(110%); }
+    .shot img {
+      position: absolute;
+      inset: 8px;
+      z-index: 1;
+      width: calc(100% - 16px);
+      height: calc(100% - 16px);
+      border-radius: 9px;
+      object-fit: cover;
+    }
+    .shot.has-image::before,
+    .shot.has-image .shot-content {
+      opacity: 0;
+    }
+    .shot-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      gap: 6px;
+      color: rgba(93,64,49,0.65);
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.15;
+      text-align: center;
+    }
+    .shot-content svg {
+      width: 32px;
+      height: 32px;
+      color: rgba(121,76,52,0.48);
+      stroke-width: 1.7;
+    }
+
+    .lower-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.28fr;
+      gap: 12px;
+    }
+    .download-card,
+    .faq-panel {
+      min-height: 164px;
+      padding: 16px 24px 12px;
+      border-radius: 14px;
+    }
+    .download-card {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+    .download-card::before {
+      position: absolute;
+      inset: -54% -42% auto auto;
+      width: 270px;
+      height: 200px;
+      content: "";
+      background: radial-gradient(circle, color-mix(in srgb, var(--platform) 18%, transparent), transparent 66%);
+      pointer-events: none;
+    }
+    .download-card.blue {
+      --platform: #0f77ef;
+      border-color: rgba(209,232,255,0.95);
+      box-shadow: 0 19px 52px rgba(34,118,219,0.12), inset 0 1px 0 rgba(255,255,255,0.84);
+    }
+    .download-card.green {
+      --platform: #48b936;
+      border-color: rgba(227,246,204,0.96);
+      box-shadow: 0 19px 52px rgba(68,158,45,0.11), inset 0 1px 0 rgba(255,255,255,0.84);
+    }
+    .download-card:hover,
+    .faq-panel:hover {
+      transform: translateY(-3px);
+    }
+    .platform-icon {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 66px;
+      height: 66px;
+      color: var(--platform);
+      filter: drop-shadow(0 13px 17px color-mix(in srgb, var(--platform) 25%, transparent));
+    }
+    .platform-icon svg {
+      width: 60px;
+      height: 60px;
+      stroke-width: 1.5;
+    }
+    .download-copy {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+    }
+    .download-copy small {
+      display: block;
+      color: var(--platform);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .download-copy h3 {
+      margin: 2px 0 4px;
+      color: var(--platform);
+      font-size: 22px;
+      line-height: 1.03;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+    .download-copy p {
+      margin: 0 0 8px;
+      color: rgba(31,24,20,0.75);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .platform-btn {
+      width: 100%;
+      min-height: 36px;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.54), transparent 25%),
+        linear-gradient(180deg, color-mix(in srgb, var(--platform) 82%, #fff 18%), var(--platform) 70%, color-mix(in srgb, var(--platform) 82%, #111 18%));
+      box-shadow: 0 13px 28px color-mix(in srgb, var(--platform) 28%, transparent), inset 0 1px 0 rgba(255,255,255,0.55);
+    }
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 7px;
+      color: color-mix(in srgb, var(--platform) 65%, #2f251f);
+      font-size: 11px;
+      font-weight: 750;
+    }
+    .meta-row span + span::before {
+      margin-right: 14px;
+      content: "";
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: currentColor;
+      vertical-align: middle;
+    }
+
+    .faq-panel {
+      padding: 11px 22px 11px;
+    }
+    .faq-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 8px;
+      color: #1d120d;
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+    .faq-heading svg {
+      width: 21px;
+      height: 21px;
+      color: #59301f;
+    }
+    .accordion {
+      display: grid;
+      gap: 7px;
+    }
+    .faq-item {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.64);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.34);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.62);
+      transition: background 180ms ease, box-shadow 180ms ease;
+    }
+    .faq-item.open {
+      background: rgba(255,255,255,0.52);
+      box-shadow: 0 12px 24px rgba(118,67,37,0.1), inset 0 1px 0 rgba(255,255,255,0.78);
+    }
+    .faq-item:hover {
+      box-shadow: 0 10px 20px rgba(118,67,37,0.09), inset 0 1px 0 rgba(255,255,255,0.72);
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-height: 28px;
+      padding: 0 12px;
+      border: 0;
+      color: #1b1410;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 760;
+      text-align: left;
+    }
+    .faq-question svg {
+      flex: none;
+      width: 15px;
+      height: 15px;
+      transition: transform 190ms ease;
+    }
+    .faq-item.open .faq-question svg { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      color: rgba(47,36,29,0.72);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.45;
+      opacity: 0;
+      transition: max-height 320ms ease, opacity 220ms ease;
+    }
+    .faq-item.open .faq-answer {
+      opacity: 1;
+    }
+    .faq-answer p {
+      margin: 0;
+      padding: 0 12px 12px;
+    }
+
+    .site-footer {
+      position: relative;
+      z-index: 5;
+      width: min(1420px, calc(100vw - 32px));
+      min-height: 108px;
+      margin: 0 auto;
+      padding: 27px min(8vw, 118px);
+      border: 2px solid rgba(171, 84, 31, 0.84);
+      border-bottom: 0;
+      border-radius: 27px 27px 0 0;
+      color: rgba(255,246,239,0.88);
+      background:
+        radial-gradient(circle at 10% 40%, rgba(255,116,24,0.18), transparent 18%),
+        linear-gradient(180deg, rgba(28,25,23,0.96), #0f0e0d);
+      box-shadow: 0 -16px 42px rgba(53,28,16,0.3), inset 0 1px 0 rgba(255,255,255,0.13);
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+    .footer-brand .brand-name {
+      color: rgba(255,246,238,0.92);
+      font-size: 25px;
+    }
+    .footer-brand .orb-mark {
+      width: 43px;
+      height: 43px;
+      box-shadow: 0 0 24px rgba(255,101,20,0.65), inset 0 2px 8px rgba(255,255,255,0.72);
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(18px, 2.3vw, 32px);
+      color: rgba(255,241,232,0.72);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .footer-links a {
+      transition: color 180ms ease, transform 180ms ease;
+    }
+    .footer-links a:hover {
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .copyright {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 22px;
+      color: rgba(255,241,232,0.68);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .to-top {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,125,38,0.75);
+      border-radius: 50%;
+      color: #ffad63;
+      background: rgba(255,113,24,0.1);
+      box-shadow: 0 0 20px rgba(255,103,20,0.2), inset 0 1px 0 rgba(255,255,255,0.18);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+    .to-top:hover {
+      transform: translateY(-3px);
+      background: rgba(255,113,24,0.2);
+    }
+    .to-top svg { width: 18px; height: 18px; }
+
+    @keyframes orbFloat {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -13px; }
+    }
+    @keyframes ringDrift {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes bubbleFloat {
+      0%, 100% { translate: 0 0; scale: 1; }
+      50% { translate: 0 -15px; scale: 1.035; }
+    }
+    @keyframes ribbonFlow {
+      0% { translate: -2vw 0; opacity: 0.62; }
+      100% { translate: 3vw 0; opacity: 0.96; }
+    }
+
+    @media (max-width: 1120px) {
+      :root { --max: 960px; }
+      .topbar {
+        grid-template-columns: auto 1fr auto;
+      }
+      .nav a { min-width: 82px; }
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: 415px;
+        padding: 42px 32px 30px;
+      }
+      .hero-copy { max-width: 570px; }
+      .hero-visual {
+        inset: 84px -92px 0 31%;
+        opacity: .9;
+      }
+      .feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .lower-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .faq-panel {
+        grid-column: 1 / -1;
+      }
+      .footer-inner {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+      .copyright { justify-content: center; }
+    }
+
+    @media (max-width: 820px) {
+      .page { padding-inline: 12px; }
+      .shell { width: min(var(--max), calc(100vw - 24px)); }
+      .topbar {
+        top: 10px;
+        min-height: 68px;
+        padding: 9px 9px 9px 16px;
+      }
+      .menu-btn { display: grid; }
+      .actions .btn { display: none; }
+      .nav {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: calc(100% + 10px);
+        display: grid;
+        gap: 4px;
+        padding: 9px;
+        border: 1px solid rgba(255,255,255,0.7);
+        border-radius: 15px;
+        background: rgba(255,248,240,0.84);
+        box-shadow: 0 18px 46px rgba(110,61,31,0.18), inset 0 1px 0 rgba(255,255,255,0.84);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+        transform-origin: top;
+        pointer-events: none;
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+      .topbar.nav-open .nav {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+      .nav a {
+        min-width: 0;
+        padding: 12px;
+        text-align: left;
+      }
+      .nav a + a::before { display: none; }
+      .nav a.active::after {
+        left: auto;
+        right: 12px;
+        bottom: 50%;
+        transform: translateY(50%);
+      }
+      .hero {
+        min-height: 580px;
+        padding: 42px 24px 28px;
+      }
+      .hero-visual {
+        inset: 260px -112px 0 2%;
+      }
+      .main-orb {
+        right: 130px;
+        width: min(300px, 64vw);
+      }
+      .b1 { right: 330px; }
+      .b2 { right: 366px; top: 178px; }
+      .b3 { right: 46px; top: 18px; }
+      .b4 { right: 128px; top: 238px; }
+      .feature-panel,
+      .screenshot-panel {
+        padding-inline: 16px;
+      }
+      .panel-title {
+        align-items: flex-start;
+      }
+      .live-note {
+        white-space: normal;
+      }
+      .shot-grid,
+      .lower-grid {
+        grid-template-columns: 1fr;
+      }
+      .download-card {
+        min-height: 168px;
+      }
+      .site-footer {
+        width: calc(100vw - 24px);
+        padding: 25px 20px 30px;
+      }
+      .footer-links {
+        flex-wrap: wrap;
+      }
+      .copyright {
+        flex-wrap: wrap;
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page { padding-inline: 8px; }
+      .shell { width: calc(100vw - 16px); }
+      .brand-name {
+        font-size: 21px;
+      }
+      .orb-mark {
+        width: 38px;
+        height: 38px;
+      }
+      .topbar {
+        border-radius: 15px;
+      }
+      .hero {
+        min-height: 608px;
+        padding: 34px 18px 24px;
+      }
+      .eyebrow { display: none; }
+      h1 { font-size: clamp(58px, 21vw, 78px); }
+      .hero-sub { font-size: clamp(28px, 9.5vw, 37px); }
+      .hero p { font-size: 14px; }
+      .trust-row { gap: 8px; }
+      .trust-pill {
+        min-height: 38px;
+        padding-inline: 12px;
+        font-size: 12px;
+      }
+      .hero-visual {
+        inset: 282px -132px 0 -8%;
+      }
+      .main-orb {
+        right: 164px;
+        width: min(276px, 75vw);
+      }
+      .light-field {
+        inset: 48px -24vw 0 -52vw;
+      }
+      .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+      }
+      .feature-card {
+        min-height: 92px;
+      }
+      .panel-title {
+        display: grid;
+        gap: 9px;
+      }
+      .ghost-btn {
+        width: max-content;
+      }
+      .download-card {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 13px;
+        padding: 21px 18px 16px;
+      }
+      .platform-icon,
+      .platform-icon svg {
+        width: 52px;
+        height: 52px;
+      }
+      .download-copy h3 {
+        font-size: 20px;
+      }
+      .meta-row {
+        gap: 9px;
+        font-size: 10px;
+      }
+      .meta-row span + span::before {
+        margin-right: 9px;
+      }
+      .faq-panel {
+        padding: 13px 13px;
+      }
+      .site-footer {
+        border-radius: 23px 23px 0 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="top">
+    <header class="shell topbar glass" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="VEIL home">
+        <span class="orb-mark" aria-hidden="true"></span>
+        <span class="brand-name">VEIL</span>
+      </a>
+
+      <nav class="nav" aria-label="Main menu">
+        <a class="active" href="#top" data-scroll>Home</a>
+        <a href="#features" data-scroll>Features</a>
+        <a href="#screenshots" data-scroll>Screenshots</a>
+        <a href="#faq" data-scroll>FAQ</a>
+      </nav>
+
+      <div class="actions">
+        <a class="btn" href="#downloads" data-scroll>
+          <i data-lucide="download" aria-hidden="true"></i>
+          <span>Download VEIL</span>
+        </a>
+        <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false">
+          <i data-lucide="menu" aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="shell hero" aria-label="VEIL landing hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Live access</p>
+          <h1><span>VEIL</span></h1>
+          <div class="hero-sub">a place where <span class="warm">ai is free</span></div>
+          <p>Current live access, in one clean interface. Feature set updates over time.</p>
+          <div class="trust-row" aria-label="Highlights">
+            <span class="trust-pill" style="--pill-color:#136ee8"><i data-lucide="shield-check" aria-hidden="true"></i>100% Private</span>
+            <span class="trust-pill" style="--pill-color:#ff5e13"><i data-lucide="heart" aria-hidden="true"></i>Always Yours</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="light-field">
+            <span class="ribbon r1"></span>
+            <span class="ribbon r2"></span>
+            <span class="ribbon r3"></span>
+            <span class="ribbon r4"></span>
+            <span class="ribbon r5"></span>
+          </div>
+          <div class="main-orb">
+            <span class="orb-ring"></span>
+            <span class="orb-shadow"></span>
+          </div>
+          <span class="bubble b1"></span>
+          <span class="bubble b2"></span>
+          <span class="bubble b3"></span>
+          <span class="bubble b4"></span>
+        </div>
+      </section>
+
+      <div class="shell section-stack">
+        <section class="panel feature-panel glass reveal" id="features" aria-labelledby="features-title">
+          <div class="panel-title">
+            <h2 id="features-title">What VEIL can do right now</h2>
+            <span class="live-note">Live snapshot - features may update over time.</span>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card" style="--tone:#ff7c22">
+              <span class="feature-icon"><i data-lucide="layers-3" aria-hidden="true"></i></span>
+              <strong>33 base models</strong>
+            </article>
+            <article class="feature-card" style="--tone:#8d6df5">
+              <span class="feature-icon"><i data-lucide="messages-square" aria-hidden="true"></i></span>
+              <strong>Chat</strong>
+            </article>
+            <article class="feature-card" style="--tone:#2992d9">
+              <span class="feature-icon"><i data-lucide="globe-2" aria-hidden="true"></i></span>
+              <strong>Web Search</strong>
+            </article>
+            <article class="feature-card" style="--tone:#e84abd">
+              <span class="feature-icon"><i data-lucide="blend" aria-hidden="true"></i></span>
+              <strong>Combine 2-3 models</strong>
+            </article>
+            <article class="feature-card" style="--tone:#ff9b23">
+              <span class="feature-icon"><i data-lucide="zap" aria-hidden="true"></i></span>
+              <strong>Fast Answers</strong>
+            </article>
+            <article class="feature-card" style="--tone:#75bd65">
+              <span class="feature-icon"><i data-lucide="code-2" aria-hidden="true"></i></span>
+              <strong>Code Help</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel screenshot-panel glass reveal" id="screenshots" aria-labelledby="screenshots-title">
+          <div class="panel-title">
+            <div class="title-left">
+              <span class="title-badge"><i data-lucide="camera" aria-hidden="true"></i></span>
+              <div>
+                <h2 id="screenshots-title">Screenshots</h2>
+                <p>A glimpse of the VEIL experience.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot-grid">
+            <article class="shot" data-shot-slot="0"><div class="shot-content"><i data-lucide="image" aria-hidden="true"></i><span>Screenshot<br>coming soon</span></div></article>
+            <article class="shot" data-shot-slot="1"><div class="shot-content"><i data-lucide="image" aria-hidden="true"></i><span>Screenshot<br>coming soon</span></div></article>
+            <article class="shot" data-shot-slot="2"><div class="shot-content"><i data-lucide="image" aria-hidden="true"></i><span>Screenshot<br>coming soon</span></div></article>
+            <article class="shot" data-shot-slot="3"><div class="shot-content"><i data-lucide="image" aria-hidden="true"></i><span>Screenshot<br>coming soon</span></div></article>
+          </div>
+        </section>
+
+        <section class="lower-grid" id="downloads" aria-label="Downloads and FAQ">
+          <article class="panel download-card blue glass reveal">
+            <span class="platform-icon"><i data-lucide="monitor-down" aria-hidden="true"></i></span>
+            <div class="download-copy">
+              <small>Download for</small>
+              <h3>Windows</h3>
+              <p>Windows 10 / 11 (64-bit)</p>
+              <a class="btn platform-btn" href="downloads/VEIL-Setup.exe" download="VEIL-Setup.exe" data-download-target="windows">Download EXE <i data-lucide="download" aria-hidden="true"></i></a>
+              <div class="meta-row" aria-label="Windows metadata"><span>.exe</span><span>Secure</span><span>Local</span></div>
+            </div>
+          </article>
+
+          <article class="panel download-card green glass reveal">
+            <span class="platform-icon"><i data-lucide="smartphone" aria-hidden="true"></i></span>
+            <div class="download-copy">
+              <small>Download for</small>
+              <h3>Android</h3>
+              <p>Android 8.0 and above</p>
+              <a class="btn platform-btn" href="downloads/VEIL-Android.apk" download="VEIL-Android.apk" data-download-target="android">Download APK <i data-lucide="download" aria-hidden="true"></i></a>
+              <div class="meta-row" aria-label="Android metadata"><span>.apk</span><span>Secure</span><span>Local</span></div>
+            </div>
+          </article>
+
+          <section class="panel faq-panel glass reveal" id="faq" aria-labelledby="faq-title">
+            <h2 class="faq-heading" id="faq-title"><i data-lucide="message-circle-question" aria-hidden="true"></i>FAQ</h2>
+            <div class="accordion">
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">What is VEIL? <i data-lucide="chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer"><p>VEIL is a place where AI is free. One interface. Many models. Endless possibilities.</p></div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">Is VEIL free to use? <i data-lucide="chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer"><p>Yes. VEIL is designed to make advanced AI accessible to everyone.</p></div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">Which models are available? <i data-lucide="chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer"><p>Access powerful models including GPT 5.5, Claude Opus 4.7, and Gemini 3.1 Pro - and many more.</p></div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">Is my data private and secure? <i data-lucide="chevron-down" aria-hidden="true"></i></button>
+                <div class="faq-answer"><p>Your privacy matters. VEIL is built with security and user trust in mind.</p></div>
+              </article>
+            </div>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="brand footer-brand" href="#top" aria-label="VEIL home">
+          <span class="orb-mark" aria-hidden="true"></span>
+          <span class="brand-name">VEIL</span>
+        </a>
+        <nav class="footer-links" aria-label="Footer menu">
+          <a href="#top" data-scroll>Home</a>
+          <a href="#features" data-scroll>Features</a>
+          <a href="#screenshots" data-scroll>Screenshots</a>
+          <a href="#faq" data-scroll>FAQ</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </nav>
+        <div class="copyright">
+          <span>&copy; 2026 VEIL. All rights reserved.</span>
+          <a class="to-top" href="#top" aria-label="Back to top" data-scroll><i data-lucide="arrow-up" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    window.addEventListener("error", (event) => {
+      document.documentElement.dataset.veilError = event.message;
+    });
+
+    const initIcons = () => {
+      try {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      } catch (error) {
+        document.documentElement.dataset.iconState = "fallback";
+      }
+    };
+
+    const startVeil = () => {
+      document.documentElement.dataset.veilScript = "ready";
+      document.body.classList.add("veil-motion");
+      const revealItems = document.querySelectorAll(".reveal");
+      window.setTimeout(() => {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }, 80);
+
+      const topbar = document.querySelector(".topbar");
+      const menuBtn = document.querySelector(".menu-btn");
+      const navLinks = document.querySelectorAll(".nav a");
+      const scrollLinks = document.querySelectorAll("a[data-scroll][href^='#']");
+
+      menuBtn?.addEventListener("click", () => {
+        const isOpen = topbar?.classList.toggle("nav-open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      const closeMenu = () => {
+        topbar?.classList.remove("nav-open");
+        menuBtn?.setAttribute("aria-expanded", "false");
+      };
+
+      scrollLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+          const targetId = link.getAttribute("href");
+          const target = targetId === "#top" ? document.getElementById("top") : document.querySelector(targetId);
+          if (!target) return;
+          event.preventDefault();
+          closeMenu();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.pushState(null, "", targetId);
+        });
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!topbar?.classList.contains("nav-open")) return;
+        if (topbar.contains(event.target)) return;
+        closeMenu();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeMenu();
+      });
+
+      const setActiveLink = () => {
+        let current = "top";
+        const offset = 150;
+        document.querySelectorAll("main section[id]").forEach((section) => {
+          if (section.getBoundingClientRect().top <= offset) current = section.id;
+        });
+        navLinks.forEach((link) => {
+          const target = link.getAttribute("href")?.replace("#", "");
+          link.classList.toggle("active", target === current || (current === "downloads" && target === "faq"));
+        });
+      };
+      setActiveLink();
+      window.addEventListener("scroll", setActiveLink, { passive: true });
+
+      revealItems.forEach((item, index) => {
+        item.style.transitionDelay = `${Math.min(index * 80, 220)}ms`;
+      });
+      if ("IntersectionObserver" in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.16 });
+        revealItems.forEach((item) => revealObserver.observe(item));
+        window.setTimeout(() => {
+          revealItems.forEach((item) => item.classList.add("is-visible"));
+        }, 900);
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      const closeFaqItem = (item) => {
+        const button = item.querySelector(".faq-question");
+        const answer = item.querySelector(".faq-answer");
+        if (!button || !answer) return;
+        answer.style.maxHeight = `${answer.scrollHeight}px`;
+        answer.style.opacity = "1";
+        requestAnimationFrame(() => {
+          item.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          answer.style.maxHeight = "0px";
+          answer.style.opacity = "0";
+        });
+      };
+
+      const openFaqItem = (item) => {
+        const button = item.querySelector(".faq-question");
+        const answer = item.querySelector(".faq-answer");
+        if (!button || !answer) return;
+        item.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+        answer.style.maxHeight = `${answer.scrollHeight}px`;
+        answer.style.opacity = "1";
+      };
+
+      document.querySelectorAll(".faq-item").forEach((item) => {
+        const button = item.querySelector(".faq-question");
+        const answer = item.querySelector(".faq-answer");
+        button.addEventListener("click", () => {
+          if (item.classList.contains("open")) {
+            closeFaqItem(item);
+          } else {
+            openFaqItem(item);
+          }
+        });
+        answer.addEventListener("transitionend", () => {
+          if (item.classList.contains("open")) answer.style.maxHeight = `${answer.scrollHeight}px`;
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        document.querySelectorAll(".faq-item.open .faq-answer").forEach((answer) => {
+          answer.style.maxHeight = `${answer.scrollHeight}px`;
+        });
+      });
+
+      const screenshotSlots = document.querySelectorAll("[data-shot-slot]");
+      const screenshotSources = Array.isArray(window.VEIL_SCREENSHOTS) ? window.VEIL_SCREENSHOTS : [];
+      screenshotSlots.forEach((slot, index) => {
+        const source = screenshotSources[index] || slot.dataset.src;
+        if (!source) return;
+        const image = new Image();
+        image.src = source;
+        image.alt = slot.dataset.alt || `VEIL screenshot ${index + 1}`;
+        image.loading = "lazy";
+        image.addEventListener("load", () => {
+          slot.classList.add("has-image");
+          slot.appendChild(image);
+        }, { once: true });
+        image.addEventListener("error", () => {
+          slot.classList.remove("has-image");
+        }, { once: true });
+      });
+
+      document.querySelectorAll("[data-download-target]").forEach((link) => {
+        link.addEventListener("click", () => {
+          link.dataset.clicked = "true";
+        });
+      });
+
+      const root = document.documentElement;
+      let rafId = 0;
+      window.addEventListener("pointermove", (event) => {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const x = (event.clientX / window.innerWidth - 0.5) * 80;
+          const y = (event.clientY / window.innerHeight - 0.5) * 80;
+          root.style.setProperty("--mx", `${x}px`);
+          root.style.setProperty("--my", `${y}px`);
+        });
+      }, { passive: true });
+
+      initIcons();
+    };
+
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", startVeil, { once: true });
+    } else {
+      startVeil();
+    }
+
+    window.addEventListener("load", initIcons);
+  </script>
+</body>
+</html>
