@@ -1,6 +1,8 @@
 const { Readable } = require("node:stream");
 
 const UPSTREAM = "https://unlimited.surf";
+const UPSTREAM_TIMEOUT_MS = 240000;
+const UPSTREAM_ATTEMPTS = 2;
 
 function copyRequestHeaders(req) {
   const headers = {
@@ -47,13 +49,28 @@ function requestBody(req) {
 
 async function proxy(req, res, pathname) {
   const method = req.method || "GET";
-  const upstream = await fetch(`${UPSTREAM}${pathname}`, {
-    method,
-    headers: copyRequestHeaders(req),
-    body: requestBody(req),
-    redirect: "manual",
-    signal: AbortSignal.timeout(120000)
-  });
+  const body = requestBody(req);
+  const headers = copyRequestHeaders(req);
+  let upstream;
+  let lastError;
+
+  for (let attempt = 1; attempt <= UPSTREAM_ATTEMPTS; attempt += 1) {
+    try {
+      upstream = await fetch(`${UPSTREAM}${pathname}`, {
+        method,
+        headers,
+        body,
+        redirect: "manual",
+        signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
+      });
+      if (![502, 503, 504].includes(upstream.status) || attempt === UPSTREAM_ATTEMPTS) break;
+    } catch (error) {
+      lastError = error;
+      if (attempt === UPSTREAM_ATTEMPTS) throw error;
+    }
+  }
+
+  if (!upstream && lastError) throw lastError;
 
   res.statusCode = upstream.status;
   copyResponseHeaders(upstream, res);

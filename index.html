@@ -25350,18 +25350,23 @@ window.ElevenLabsClient = ElevenLabsClient;
     .bubble pre {
       overflow: auto;
       margin: 10px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 14px;
-      background: #0b0b0e;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(var(--accent-rgb), 0.2), transparent 32%),
+        linear-gradient(180deg, #101013, #08080a);
       color: #f7f7fb;
       font-family: var(--mono);
       font-size: 12px;
       line-height: 1.5;
+      box-shadow: 0 18px 45px rgba(40, 17, 6, 0.18);
     }
 
     .code-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
       padding: 9px 11px;
       color: rgba(255,255,255,0.66);
       border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -25370,10 +25375,27 @@ window.ElevenLabsClient = ElevenLabsClient;
       text-transform: uppercase;
     }
 
-    .code-copy {
+    .code-tools {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-copy,
+    .code-download {
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
       color: white;
       font-size: 10px;
       font-weight: 900;
+    }
+
+    .code-copy:hover,
+    .code-download:hover {
+      background: rgba(var(--accent-rgb), 0.28);
+      border-color: rgba(var(--accent-rgb), 0.42);
     }
 
     .bubble code {
@@ -25386,6 +25408,12 @@ window.ElevenLabsClient = ElevenLabsClient;
       padding: 12px;
       white-space: pre;
     }
+
+    .tok-keyword { color: #ffb86b; }
+    .tok-string { color: #9be28f; }
+    .tok-comment { color: #7c8596; font-style: italic; }
+    .tok-number { color: #8bd8ff; }
+    .tok-attr { color: #ffd479; }
 
     .inline-code {
       padding: 2px 5px;
@@ -34910,6 +34938,8 @@ window.ElevenLabsClient = ElevenLabsClient;
       "- VEIL Prism: Power 96. Best for creative structure, long context, design thinking, UI/UX ideas, concepts, comparisons, and visual product direction.",
       "- VEIL Forge: Power 92. Best for web apps, practical edits, debugging, refactors, HTML/CSS/JS fixes, and improving existing files.",
       "- VEIL Pulse: Power 82. Fastest VEIL model. Best for quick answers, small fixes, short tasks, and lightweight chat.",
+      "VEIL Search + Files can combine live web search with uploaded readable files, then turn sources and attachments into answers, code, summaries, or implementation plans.",
+      "VEIL automatically continues interrupted streams in the same answer and keeps code blocks connected where possible.",
       "All visible model names, strengths, power scores, and provider identity inside VEIL must use only these VEIL names."
     ].join("\n");
 
@@ -35075,6 +35105,7 @@ Topic: a private AI workspace.`
     let benchmarkPresentationStartedAt = 0;
     let benchmarkRunToken = 0;
     let splitDrag = null;
+    const renderedCodeBlocks = new Map();
     const soundBank = {};
     const MAX_CHAT_AUTO_CONTINUES = 99;
     const VEIL_NOVA_MODEL_ID = "gateway-claude-opus-4-8";
@@ -35272,6 +35303,16 @@ Topic: a private AI workspace.`
       return wantsBuild && (target || aiFeature);
     }
 
+    function promptWantsSearch(text) {
+      return /\b(?:search|web|internet|source|sources|cite|docs?|documentation|current|currently|latest|newest|today|news|find|look up|recherchier|such|suche|quelle|quellen|aktuell|neuste|neueste|heute|doku)\b/i.test(String(text || ""));
+    }
+
+    function shouldUseSearchEndpoint(promptText, attached = []) {
+      if (searchMode) return true;
+      if (!attached.length) return false;
+      return promptWantsSearch(promptText);
+    }
+
     function effectiveModelForPrompt(promptText, modeModel) {
       if (modeModel === "__search__" || modeModel === "__merge__") return modeModel;
       return promptWantsAiBuild(promptText) ? VEIL_NOVA_MODEL_ID : selectedModel;
@@ -35296,6 +35337,8 @@ Topic: a private AI workspace.`
       const value = clean.toLowerCase();
       if (!value) return "Streaming";
       if (value.includes("asking") || value.includes("calling") || value.includes("querying") || value.includes("requesting")) return "Thinking";
+      if (value.includes("search")) return "Searching";
+      if (value.includes("file") || value.includes("attachment") || value.includes("document")) return "Reading files";
       if (value.includes("planning")) return "Writing";
       if (value.includes("recover")) return "Reconnecting";
       if (value.includes("continue")) return "Continuing";
@@ -39689,23 +39732,64 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       return files;
     }
 
+    function hashString(value) {
+      let hash = 2166136261;
+      const input = String(value || "");
+      for (let index = 0; index < input.length; index += 1) {
+        hash ^= input.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+      }
+      return (hash >>> 0).toString(36);
+    }
+
+    function codeBlockRecord(header, code, beforeText) {
+      const language = inferCodeLanguage(header, code);
+      const filename = filenameFromFence(header, code) || filenameNearFence(beforeText) || (CODE_FILE_TYPES[language] || CODE_FILE_TYPES.text).name;
+      const type = CODE_FILE_TYPES[language] || CODE_FILE_TYPES.text;
+      const id = `code-${hashString(`${filename}\n${language}\n${code}`)}`;
+      renderedCodeBlocks.set(id, { id, filename, language, mime: type.mime, code: String(code || "") });
+      return renderedCodeBlocks.get(id);
+    }
+
+    function highlightCode(code, language) {
+      const lang = String(language || "").toLowerCase();
+      let html = escapeHtml(code || "");
+      if (/html|xml|svg/.test(lang)) {
+        return html
+          .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="tok-comment">$1</span>')
+          .replace(/(&lt;\/?)([\w:-]+)/g, '$1<span class="tok-keyword">$2</span>')
+          .replace(/\s([\w:-]+)=(&quot;[^&]*?&quot;|&#039;[^&]*?&#039;)/g, ' <span class="tok-attr">$1</span>=<span class="tok-string">$2</span>');
+      }
+      if (/css/.test(lang)) {
+        return html
+          .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok-comment">$1</span>')
+          .replace(/([.#]?[-_a-zA-Z][-_a-zA-Z0-9]*(?=\s*\{))/g, '<span class="tok-keyword">$1</span>')
+          .replace(/([-\w]+)(\s*:)/g, '<span class="tok-attr">$1</span>$2')
+          .replace(/(#(?:[0-9a-fA-F]{3}){1,2}|rgba?\([^)]+\)|\b\d+(?:px|rem|em|%|vh|vw)\b)/g, '<span class="tok-number">$1</span>');
+      }
+      return html
+        .replace(/(\/\/[^\n]*|\/\*[\s\S]*?\*\/|#[^\n]*)/g, '<span class="tok-comment">$1</span>')
+        .replace(/(&quot;[^&]*?&quot;|&#039;[^&]*?&#039;|`[^`]*?`)/g, '<span class="tok-string">$1</span>')
+        .replace(/\b(const|let|var|function|return|if|else|for|while|class|async|await|import|export|from|try|catch|new|throw|def|elif|true|false|null|undefined)\b/g, '<span class="tok-keyword">$1</span>')
+        .replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-number">$1</span>');
+    }
+
     function renderMarkdown(text) {
       const raw = String(text || "");
       const proseToHtml = prose => escapeHtml(prose)
         .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
         .replace(/\n/g, "<br>");
-      const codeBlock = (lang, code) => `<pre><div class="code-head"><span>${escapeHtml(lang || "code")}</span><button class="code-copy" type="button">Copy</button></div><code>${escapeHtml(code || "")}</code></pre>`;
+      const codeBlock = record => `<pre class="code-block lang-${escapeHtml(record.language || "text")}"><div class="code-head"><span>${escapeHtml(record.filename || record.language || "code")}</span><div class="code-tools"><button class="code-copy" type="button">Copy</button><button class="code-download" type="button" data-code-download="${escapeHtml(record.id)}">Download</button></div></div><code>${highlightCode(record.code, record.language)}</code></pre>`;
       let html = "";
       let lastIndex = 0;
       const regex = /```([^\n`]*)\n?([\s\S]*?)(?:```|$)/g;
       let match;
       while ((match = regex.exec(raw))) {
         html += proseToHtml(raw.slice(lastIndex, match.index));
-        const language = inferCodeLanguage(match[1], match[2]);
-        const filename = filenameFromFence(match[1], match[2]) || filenameNearFence(raw.slice(0, match.index));
         const closed = raw.slice(match.index).includes("```") && raw.indexOf("```", match.index + 3 + match[1].length) !== -1;
-        html += codeBlock(filename || language, match[2] + (closed ? "" : "\n\n/* VEIL is continuing this file... */"));
+        const visibleCode = match[2] + (closed ? "" : "\n\n/* VEIL is continuing this file... */");
+        html += codeBlock(codeBlockRecord(match[1], visibleCode, raw.slice(0, match.index)));
         lastIndex = regex.lastIndex;
       }
       html += proseToHtml(raw.slice(lastIndex));
@@ -39830,6 +39914,8 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       const chips = [];
       if (searchMode) chips.push(`<span class="active-chip"><i data-lucide="globe-2"></i>Web Search</span>`);
       if (mergeMode) chips.push(`<span class="active-chip"><i data-lucide="git-merge"></i>Merge AI</span>`);
+      if (attachments.length) chips.push(`<span class="active-chip"><i data-lucide="paperclip"></i>${attachments.length} file${attachments.length === 1 ? "" : "s"}</span>`);
+      if (settings.effort !== "low") chips.push(`<span class="active-chip"><i data-lucide="sliders-horizontal"></i>${settings.effort} effort</span>`);
       if (settings.instructions.trim()) chips.push(`<span class="active-chip"><i data-lucide="scroll-text"></i>Instructions on</span>`);
       chips.push(`<button class="active-chip" type="button" data-open-models>${modelMark(modelById(), "mini")}${escapeHtml(modelById().name)}</button>`);
       $("activeStack").innerHTML = chips.join("");
@@ -39948,7 +40034,9 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       const prompt = typedPrompt || (attachments.length ? "Please analyze the attached files." : "");
       if (!prompt || controller) return;
       const chat = ensureChat();
-      const modeModel = searchMode ? "__search__" : mergeMode ? "__merge__" : selectedModel;
+      const attached = attachments.slice();
+      const useSearchFiles = shouldUseSearchEndpoint(prompt, attached);
+      const modeModel = useSearchFiles ? "__search__" : mergeMode ? "__merge__" : selectedModel;
       const effectiveModel = effectiveModelForPrompt(prompt, modeModel);
       if (!continuation && !attachments.length && (isModelIdentityQuestion(prompt) || isIdentityCorrectionPrompt(prompt, chat))) {
         chat.messages.push({ role: "user", content: prompt, model: modeModel, timestamp: now(), attachments: [] });
@@ -39963,9 +40051,12 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
         return;
       }
       await ensureApiKey();
-      const attached = attachments.slice();
       const attachmentContext = attached.length
-        ? ["Use the attached file contents below as context for the latest request.", ...attached.map((file, index) =>
+        ? [
+            useSearchFiles
+              ? "Use the attached file contents below together with live search/source context for the latest request."
+              : "Use the attached file contents below as context for the latest request.",
+            ...attached.map((file, index) =>
             `<attached_file index="${index + 1}" name="${file.name}" type="${file.type}" size="${file.size}">\n${file.text}\n</attached_file>`
           )].join("\n\n")
         : "";
@@ -39989,7 +40080,7 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       const requestController = new AbortController();
       controller = requestController;
       document.body.classList.add("is-streaming");
-      setStatus("Streaming");
+      setStatus(modeModel === "__search__" ? "Search + files" : "Streaming");
       updateComposerState();
       const reusingAssistant = Number.isInteger(continuationIndex) && chat.messages[continuationIndex]?.role === "assistant";
       const assistant = reusingAssistant
@@ -40013,9 +40104,9 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
         ? `Continue exactly from the next missing character without repeating anything already written. Keep unfinished code fences and files connected to the existing response.\n\nCurrent partial response:\n${assistant.content.slice(-6000)}\n\nOriginal request:\n${prompt}`
         : prompt;
       const custom = combos.find(combo => combo.id === modeModel);
-      const endpoint = searchMode ? "/api/search" : mergeMode || custom ? "/api/merge" : "/api/chat";
-      const body = searchMode
-        ? { query: outgoingPrompt, memoryToken: `veil-html-${chat.id}` }
+      const endpoint = modeModel === "__search__" ? "/api/search" : modeModel === "__merge__" || custom ? "/api/merge" : "/api/chat";
+      const body = modeModel === "__search__"
+        ? { query: outgoingPrompt, customInstructions: mergedInstructions(selectedModel), effort: settings.effort, conversation: conversationFor(chat), memoryToken: `veil-html-${chat.id}` }
         : mergeMode || custom
           ? { message: outgoingPrompt, models: custom?.models || ["gateway-claude-opus-4-8", "gateway-gpt-5-5"], customInstructions: mergedInstructions(modeModel), effort: settings.effort, conversation: conversationFor(chat) }
           : { message: outgoingPrompt, model: modeModel, customInstructions: mergedInstructions(modeModel), effort: settings.effort, conversation: conversationFor(chat), memoryToken: `veil-html-${chat.id}`, remember: true };
@@ -40659,12 +40750,14 @@ Real EXE/APK compilation requires Windows/Android build tools and cannot run ins
           <button type="button" data-remove-attachment="${escapeHtml(file.id)}" title="Remove file"><i data-lucide="x"></i></button>
         </span>`).join("");
       lucide.createIcons();
+      renderActiveStack();
     }
 
     async function attachFiles(files) {
       const accepted = Array.from(files || []).slice(0, Math.max(0, 5 - attachments.length));
       if (!accepted.length) return;
       let added = 0;
+      await ensureApiKey().catch(() => {});
       for (const file of accepted) {
         if (file.type.startsWith("image/")) {
           toast("Images are not supported yet.");
@@ -42958,6 +43051,13 @@ User: ${userText}`;
       if (event.target.closest('[data-tool="regenerate"]')) return regenerate();
       const downloadMessageButton = event.target.closest("[data-download-message]");
       if (downloadMessageButton) return downloadMessage(Number(downloadMessageButton.dataset.downloadMessage));
+      const downloadCodeButton = event.target.closest("[data-code-download]");
+      if (downloadCodeButton) {
+        const block = renderedCodeBlocks.get(downloadCodeButton.dataset.codeDownload);
+        if (!block) return toast("Code block is not ready yet.");
+        downloadBlob(new Blob([block.code], { type: `${block.mime || "text/plain"};charset=utf-8` }), block.filename || "veil-code.txt");
+        return toast(`${block.filename || "Code"} downloaded.`);
+      }
       const copyMsg = event.target.closest("[data-copy-message]");
       if (copyMsg) {
         const msg = activeChat()?.messages[Number(copyMsg.dataset.copyMessage)];
