@@ -39988,10 +39988,10 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
     function canvasFormatInstructionForPrompt(promptText) {
       if (!looksLikeCodeRequest(promptText)) return "";
       return [
-        "VEIL Chat coding canvas mode is active.",
-        "Start the answer with project files immediately. Do not wait until the end to provide files.",
-        "Every file must be inside a fenced code block and must have a filename in the header or directly above it.",
+        "VEIL code output mode is active.",
+        "Put every complete file inside a fenced code block with the filename in the header or directly above it.",
         "Do not write raw HTML, CSS, JavaScript, or app code outside fenced code blocks.",
+        "If you need multiple files, output each file as its own fenced code block.",
         "For browser games, websites, dashboards, and web apps, prefer separate complete files: index.html, styles.css, and script.js."
       ].join("\n");
     }
@@ -40268,10 +40268,32 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       </section>`;
     }
 
+    function fencedContentForDisplay(content, promptText = "") {
+      const raw = String(content || "");
+      if (!looksLikeCodeRequest(promptText) || /```/.test(raw)) return raw;
+      const files = extractLooseCodeFiles(raw, promptText);
+      if (!files.length) return raw;
+      if (files.length === 1) {
+        const file = files[0];
+        const htmlStart = raw.search(/<!doctype html|<html[\s>]/i);
+        if (htmlStart >= 0) {
+          const before = raw.slice(0, htmlStart).trim();
+          const after = raw.slice(htmlStart + file.content.length).trim();
+          return [
+            before,
+            `File: ${file.name}\n\`\`\`${file.name}\n${file.content}\n\`\`\``,
+            after
+          ].filter(Boolean).join("\n\n");
+        }
+      }
+      return files.map(file => `File: ${file.name}\n\`\`\`${file.name}\n${file.content}\n\`\`\``).join("\n\n");
+    }
+
     function renderMessage(msg, index) {
       const isUser = msg.role === "user";
       const model = modelById(msg.model || selectedModel);
       if (!isUser) msg.content = sanitizeModelIdentityLeak(msg.content, msg.model || selectedModel);
+      const displayContent = isUser ? msg.content : fencedContentForDisplay(msg.content, msg.canvasPrompt || msg.content);
       const provider = providerFor(model);
       const sources = Array.isArray(msg.sources) && msg.sources.length
         ? `<div class="sources">${msg.sources.slice(0, 8).map(src => `<a href="${escapeHtml(src.url || "#")}" target="_blank" rel="noopener">${escapeHtml(src.title || src.url || "Source")}</a>`).join("")}</div>`
@@ -40286,7 +40308,7 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
         <div class="avatar">${isUser ? '<i data-lucide="user"></i>' : modelMark(model, "avatar-mark")}</div>
         <div class="bubble-wrap">
           <div class="meta"><strong>${isUser ? "You" : escapeHtml(model.name)}</strong>${!isUser ? `<span class="tier">${escapeHtml(model.tier)}</span>` : ""}<span>${timeAgo(msg.timestamp)}</span></div>
-          <div class="bubble" data-message-bubble="${index}">${renderMarkdown(msg.content)}${!isUser ? renderCodingCanvasPanel(msg, index) : ""}${sources}${actions}</div>
+          <div class="bubble" data-message-bubble="${index}">${renderMarkdown(displayContent)}${sources}${actions}</div>
         </div>
       </article>`;
     }
@@ -40377,9 +40399,8 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
             `<attached_file index="${index + 1}" name="${file.name}" type="${file.type}" size="${file.size}">\n${file.text}\n</attached_file>`
           )].join("\n\n")
         : "";
-      const canvasContext = canvasContextForPrompt(chat, prompt);
       const canvasFormatInstruction = canvasFormatInstructionForPrompt(prompt);
-      const requestPrompt = [prompt, attachmentContext, canvasContext, canvasFormatInstruction].filter(Boolean).join("\n\n");
+      const requestPrompt = [prompt, attachmentContext, canvasFormatInstruction].filter(Boolean).join("\n\n");
       playSound("send", 0.18, continuation ? 0.98 : 1);
       if (!continuation) {
         chat.messages.push({ role: "user", content: prompt, model: effectiveModel, timestamp: now(), attachments: attached.map(file => file.name) });
@@ -40414,7 +40435,6 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       }
       const index = reusingAssistant ? continuationIndex : chat.messages.length - 1;
       assistant.canvasPrompt = prompt;
-      ensureAssistantCanvasStarted(chat, assistant, prompt, index);
       const target = () => $("messages").querySelector(`[data-message-bubble="${index}"]`);
       if (!reusingAssistant || recoveryAttempt === 0) {
         refresh();
@@ -40481,7 +40501,6 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
           await new Promise(resolve => setTimeout(resolve, 35));
           return await streamAssistant(prompt, chat, modeModel, index, recoveryAttempt + 1);
         }
-        updateAssistantCanvasFiles(chat, assistant, prompt, index);
         setStatus("Done");
         playSound("success", 0.16, 1.04);
       } catch (err) {
@@ -40505,7 +40524,6 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
         }
       } finally {
         if (!handedOffRecovery) {
-          if (assistant?.content?.trim()) updateAssistantCanvasFiles(chat, assistant, prompt, index);
           chat.updated = now();
           if (controller === requestController) controller = null;
           document.body.classList.remove("is-streaming");
@@ -40522,7 +40540,7 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
         const bubble = target();
         if (!bubble) return;
         const sources = assistant.sources?.length ? `<div class="sources">${assistant.sources.slice(0, 8).map(src => `<a href="${escapeHtml(src.url || "#")}" target="_blank" rel="noopener">${escapeHtml(src.title || src.url || "Source")}</a>`).join("")}</div>` : "";
-        bubble.innerHTML = renderMarkdown(assistant.content) + renderCodingCanvasPanel(assistant, Number(bubble.dataset.messageBubble)) + sources;
+        bubble.innerHTML = renderMarkdown(fencedContentForDisplay(assistant.content, assistant.canvasPrompt || assistant.content)) + sources;
         lucide.createIcons();
         $("chatCanvas").scrollTop = $("chatCanvas").scrollHeight;
       }, 32);
@@ -40543,7 +40561,6 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       if (delta) assistant.content += delta;
       if (full) assistant.content = full;
       assistant.content = sanitizeModelIdentityLeak(assistant.content, assistant.model || selectedModel);
-      updateAssistantCanvasFiles(activeChat(), assistant, assistant.canvasPrompt || assistant.content, Number(target()?.dataset.messageBubble));
       updateChatStreaming(assistant, target);
       if (data.error) throw new Error(String(data.error));
     }
@@ -40819,12 +40836,13 @@ Real EXE/APK compilation requires Windows/Android build tools and cannot run ins
       const chat = activeChat();
       const message = chat?.messages?.[index];
       if (!message || message.role !== "assistant") return toast("Nothing to download.");
-      const files = normalizeCanvasFiles(message.canvasFiles?.length ? message.canvasFiles : extractCodeFiles(message.content));
+      const displayContent = fencedContentForDisplay(message.content, message.canvasPrompt || message.content);
+      const files = normalizeCanvasFiles(extractCodeFiles(displayContent));
       const baseName = exportBaseName(chat);
 
       try {
         if (!files.length) {
-          downloadBlob(new Blob([message.content], { type: "text/markdown;charset=utf-8" }), `${baseName}.md`);
+          downloadBlob(new Blob([displayContent], { type: "text/markdown;charset=utf-8" }), `${baseName}.md`);
           toast("Message downloaded.");
           return;
         }
