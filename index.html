@@ -25415,158 +25415,6 @@ window.ElevenLabsClient = ElevenLabsClient;
     .tok-number { color: #8bd8ff; }
     .tok-attr { color: #ffd479; }
 
-    .chat-canvas-panel {
-      overflow: hidden;
-      margin-top: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.78);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.62);
-      box-shadow: 0 20px 48px rgba(98, 48, 22, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.72);
-    }
-
-    .chat-canvas-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--line-dark);
-      background: rgba(255, 249, 245, 0.66);
-    }
-
-    .chat-canvas-head strong {
-      display: block;
-      color: var(--ink);
-      font-size: 15px;
-      font-weight: 950;
-    }
-
-    .chat-canvas-head small {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .chat-canvas-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 7px;
-    }
-
-    .chat-canvas-actions button {
-      min-height: 32px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 10px;
-      border: 1px solid rgba(255, 255, 255, 0.78);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.52);
-      color: var(--ink-soft);
-      font-size: 10px;
-      font-weight: 950;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-    }
-
-    .chat-canvas-actions button:first-child {
-      color: #fff;
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--orange-2), var(--orange), var(--orange-3));
-      box-shadow: 0 12px 24px rgba(var(--accent-rgb), 0.2);
-    }
-
-    .chat-canvas-actions svg {
-      width: 13px;
-      height: 13px;
-    }
-
-    .chat-canvas-tabs {
-      display: flex;
-      gap: 6px;
-      overflow: auto;
-      padding: 10px 12px 0;
-    }
-
-    .chat-canvas-tabs button {
-      min-width: 104px;
-      min-height: 36px;
-      padding: 0 12px;
-      border: 1px solid rgba(118, 77, 55, 0.12);
-      border-bottom: 0;
-      border-radius: 12px 12px 0 0;
-      background: rgba(255, 244, 237, 0.66);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 950;
-    }
-
-    .chat-canvas-tabs button.active {
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.92);
-    }
-
-    .chat-canvas-editor {
-      display: grid;
-      grid-template-columns: 48px minmax(0, 1fr);
-      min-height: 260px;
-      max-height: 460px;
-      overflow: hidden;
-      border-top: 1px solid var(--line-dark);
-      border-bottom: 1px solid var(--line-dark);
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    .chat-canvas-lines {
-      overflow: hidden;
-      margin: 0;
-      padding: 13px 8px;
-      border-right: 1px solid rgba(118, 77, 55, 0.12);
-      color: #b88d7d;
-      background: rgba(255, 246, 241, 0.68);
-      font: 11px/1.72 var(--mono);
-      text-align: right;
-      user-select: none;
-    }
-
-    .chat-canvas-editor textarea {
-      width: 100%;
-      min-height: 260px;
-      max-height: 460px;
-      resize: vertical;
-      padding: 13px 14px;
-      border: 0;
-      outline: 0;
-      color: #3d2117;
-      background: transparent;
-      font: 12px/1.72 var(--mono);
-      font-weight: 700;
-      tab-size: 2;
-      white-space: pre;
-      overflow: auto;
-    }
-
-    .chat-canvas-foot {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 11px 12px;
-      background: rgba(255, 248, 244, 0.66);
-    }
-
-    .chat-canvas-foot span {
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(var(--accent-rgb), 0.08);
-      color: color-mix(in srgb, var(--accent-deep) 62%, var(--ink));
-      font-size: 10px;
-      font-weight: 950;
-    }
-
     .inline-code {
       padding: 2px 5px;
       border-radius: 7px;
@@ -39949,31 +39797,6 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       return [];
     }
 
-    function starterCanvasFiles(promptText = "") {
-      const prompt = String(promptText || "").toLowerCase();
-      const webLike = /\b(html|css|javascript|js|website|webseite|landing page|dashboard|game|app|spiel)\b/.test(prompt);
-      if (webLike) {
-        return normalizeCanvasFiles([
-          { name: "index.html", language: "html", mime: "text/html", content: "<!-- VEIL is preparing index.html... -->" },
-          { name: "styles.css", language: "css", mime: "text/css", content: "/* VEIL is preparing styles.css... */" },
-          { name: "script.js", language: "javascript", mime: "text/javascript", content: "// VEIL is preparing script.js..." }
-        ]);
-      }
-      return normalizeCanvasFiles([
-        { name: "main.js", language: "javascript", mime: "text/javascript", content: "// VEIL is preparing main.js..." }
-      ]);
-    }
-
-    function ensureAssistantCanvasStarted(chat, assistant, promptText, assistantIndex) {
-      if (!looksLikeCodeRequest(promptText) || !assistant || assistant.role !== "assistant") return;
-      if (assistant.canvasFiles?.length) return;
-      const previous = latestCanvasFiles(chat, assistantIndex);
-      assistant.canvasFiles = previous.length ? previous : starterCanvasFiles(promptText);
-      assistant.canvasActive = assistant.canvasFiles[0]?.name || "";
-      assistant.canvasPending = true;
-      assistant.canvasUpdatedAt = now();
-    }
-
     function canvasContextForPrompt(chat, promptText) {
       if (!looksLikeCodeRequest(promptText)) return "";
       const files = latestCanvasFiles(chat);
@@ -40231,12 +40054,10 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
       $("chatCanvas").scrollTop = $("chatCanvas").scrollHeight;
     }
 
-    function lineNumbersFor(content) {
-      const count = Math.max(1, String(content || "").split(/\r?\n/).length);
-      return Array.from({ length: Math.min(count, 999) }, (_, index) => index + 1).join("\n");
+    function renderCodingCanvasPanel() {
+      return "";
     }
-
-    function renderCodingCanvasPanel(msg, index) {
+    /*
       const files = normalizeCanvasFiles(msg.canvasFiles);
       if (!files.length) return "";
       const activeName = files.some(file => file.name === msg.canvasActive) ? msg.canvasActive : files[0].name;
@@ -40267,6 +40088,8 @@ Every SEARCH block must match exactly once. Begin with the first operation, retu
         </footer>
       </section>`;
     }
+
+    */
 
     function fencedContentForDisplay(content, promptText = "") {
       const raw = String(content || "");
@@ -40862,30 +40685,6 @@ Real EXE/APK compilation requires Windows/Android build tools and cannot run ins
         toast(`${files.length} files downloaded as ZIP.`);
       } catch (error) {
         toast(error?.message || "Could not create download.");
-      }
-    }
-
-    async function downloadCanvasFiles(index) {
-      const chat = activeChat();
-      const message = chat?.messages?.[index];
-      const files = normalizeCanvasFiles(message?.canvasFiles || []);
-      if (!files.length) return toast("No project files yet.");
-      try {
-        if (files.length === 1) {
-          const file = files[0];
-          downloadBlob(new Blob([file.content], { type: `${file.mime || "text/plain"};charset=utf-8` }), file.name);
-          toast(`${file.name} downloaded.`);
-          return;
-        }
-        const JSZip = await getZipLibrary();
-        const zip = new JSZip();
-        files.forEach(file => zip.file(file.name, file.content));
-        addAppBuildFiles(zip, files);
-        const blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
-        downloadBlob(blob, `${exportBaseName(chat)}-project.zip`);
-        toast(`${files.length} files downloaded as ZIP.`);
-      } catch (error) {
-        toast(error?.message || "Could not create ZIP.");
       }
     }
 
@@ -43425,26 +43224,6 @@ User: ${userText}`;
         downloadBlob(new Blob([block.code], { type: `${block.mime || "text/plain"};charset=utf-8` }), block.filename || "veil-code.txt");
         return toast(`${block.filename || "Code"} downloaded.`);
       }
-      const canvasDownload = event.target.closest("[data-canvas-download]");
-      if (canvasDownload) return downloadCanvasFiles(Number(canvasDownload.dataset.canvasDownload));
-      const canvasCopy = event.target.closest("[data-canvas-copy]");
-      if (canvasCopy) {
-        const msg = activeChat()?.messages[Number(canvasCopy.dataset.canvasCopy)];
-        const files = normalizeCanvasFiles(msg?.canvasFiles || []);
-        const file = files.find(item => item.name === canvasCopy.dataset.canvasFile) || files[0];
-        return copy(file?.content || "");
-      }
-      const canvasTab = event.target.closest("[data-canvas-tab]");
-      if (canvasTab) {
-        const chat = activeChat();
-        const msg = chat?.messages[Number(canvasTab.dataset.canvasTab)];
-        if (!msg?.canvasFiles?.length) return;
-        msg.canvasActive = canvasTab.dataset.canvasFile;
-        chat.updated = now();
-        writeState();
-        renderMessages();
-        return;
-      }
       const copyMsg = event.target.closest("[data-copy-message]");
       if (copyMsg) {
         const msg = activeChat()?.messages[Number(copyMsg.dataset.copyMessage)];
@@ -43692,26 +43471,6 @@ User: ${userText}`;
         closeModals();
         return;
       }
-    });
-
-    document.addEventListener("input", event => {
-      const editor = event.target.closest("[data-canvas-editor]");
-      if (!editor) return;
-      const chat = activeChat();
-      const msg = chat?.messages?.[Number(editor.dataset.canvasEditor)];
-      const files = normalizeCanvasFiles(msg?.canvasFiles || []);
-      const file = files.find(item => item.name === editor.dataset.canvasFile);
-      if (!msg || !file) return;
-      file.content = editor.value;
-      file.language = file.language || inferCodeLanguage(file.name, file.content);
-      file.mime = file.mime || (CODE_FILE_TYPES[file.language] || CODE_FILE_TYPES.text).mime;
-      msg.canvasFiles = files;
-      msg.canvasActive = file.name;
-      msg.canvasUpdatedAt = now();
-      chat.updated = now();
-      const lines = editor.closest(".chat-canvas-panel")?.querySelector(".chat-canvas-lines");
-      if (lines) lines.textContent = lineNumbersFor(editor.value);
-      writeState();
     });
 
     $("composer").addEventListener("submit", event => {
