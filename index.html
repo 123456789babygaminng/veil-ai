@@ -32381,6 +32381,467 @@ window.ElevenLabsClient = ElevenLabsClient;
       box-shadow: none;
     }
 
+    .images-workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(260px, 330px) minmax(0, 1fr) minmax(250px, 318px);
+      gap: 12px;
+      padding: 12px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 8%, rgba(var(--accent-rgb), .2), transparent 32%),
+        radial-gradient(circle at 18% 92%, rgba(255,255,255,.72), transparent 38%),
+        linear-gradient(145deg, rgba(255,255,255,.18), rgba(var(--accent-rgb), .07));
+    }
+
+    .image-panel,
+    .image-stage,
+    .image-side {
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.74);
+      border-radius: 18px;
+      background: rgba(255,250,247,.6);
+      box-shadow: 0 28px 70px rgba(74,39,21,.1), inset 0 1px 0 rgba(255,255,255,.86);
+      backdrop-filter: blur(26px) saturate(1.14);
+    }
+
+    .image-panel,
+    .image-side { display: flex; flex-direction: column; }
+
+    .image-panel-head,
+    .image-side-head {
+      padding: 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .image-panel-head strong,
+    .image-side-head strong {
+      display: block;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 950;
+    }
+
+    .image-panel-head small,
+    .image-side-head small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .02em;
+    }
+
+    .image-form {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .image-field label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .image-field textarea {
+      width: 100%;
+      min-height: 138px;
+      resize: vertical;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 14px;
+      color: var(--ink);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.72), rgba(255,246,241,.58));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.78), 0 14px 34px rgba(74,39,21,.06);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.5;
+      outline: none;
+    }
+
+    .image-field textarea:focus {
+      border-color: rgba(var(--accent-rgb), .48);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .1), inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    .image-chip-grid,
+    .image-model-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .image-chip-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .image-chip,
+    .image-model-card,
+    .image-action {
+      border: 1px solid rgba(255,255,255,.78);
+      border-radius: 13px;
+      background: rgba(255,255,255,.52);
+      color: var(--ink);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.76), 0 12px 28px rgba(80,38,16,.06);
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .image-chip {
+      min-height: 45px;
+      padding: 9px 11px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .image-chip small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 850;
+    }
+
+    .image-chip:hover,
+    .image-chip.active,
+    .image-model-card:hover,
+    .image-model-card.active {
+      transform: translateY(-2px);
+      border-color: rgba(var(--accent-rgb), .5);
+      box-shadow: 0 18px 34px rgba(var(--accent-rgb), .12), inset 0 1px 0 rgba(255,255,255,.82);
+    }
+
+    .image-chip.active,
+    .image-model-card.active {
+      background: linear-gradient(145deg, rgba(var(--accent-rgb), .16), rgba(255,255,255,.58));
+    }
+
+    .image-generate {
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-top: auto;
+      border: 0;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--orange-2), var(--orange), var(--orange-3));
+      box-shadow: 0 18px 34px rgba(var(--accent-rgb), .25), inset 0 1px 0 rgba(255,255,255,.35);
+      font-size: 14px;
+      font-weight: 950;
+      cursor: pointer;
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .image-generate:hover { transform: translateY(-2px); filter: saturate(1.08); }
+    .image-generate:disabled { opacity: .62; cursor: wait; transform: none; }
+
+    .image-stage {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      background:
+        radial-gradient(circle at 68% 12%, rgba(var(--accent-rgb), .2), transparent 35%),
+        linear-gradient(150deg, rgba(255,255,255,.72), rgba(255,244,238,.38));
+    }
+
+    .image-stage::before {
+      content: "";
+      position: absolute;
+      width: 360px;
+      aspect-ratio: 1;
+      right: -76px;
+      top: -90px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 20%, rgba(255,255,255,.96), transparent 0 12%, rgba(255,255,255,.34) 18%, transparent 30%),
+        linear-gradient(145deg, rgba(255,173,88,.9), var(--orange), var(--orange-3));
+      opacity: .32;
+      filter: blur(.2px);
+      animation: imageOrbFloat 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes imageOrbFloat {
+      50% { transform: translate(-16px, 18px) scale(1.04); opacity: .42; }
+    }
+
+    .image-stage-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .image-stage-head h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(22px, 3vw, 42px);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .image-stage-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .image-status-pill {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 1px solid rgba(var(--accent-rgb), .22);
+      border-radius: 999px;
+      color: var(--orange-3);
+      background: rgba(var(--accent-rgb), .08);
+      font-size: 10px;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .image-preview-wrap {
+      position: relative;
+      z-index: 1;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      overflow: auto;
+    }
+
+    .image-empty,
+    .image-loading,
+    .image-result {
+      width: min(760px, 100%);
+      min-height: min(58vh, 540px);
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,247,242,.42));
+      box-shadow: 0 30px 90px rgba(64,30,12,.1), inset 0 1px 0 rgba(255,255,255,.9);
+      overflow: hidden;
+    }
+
+    .image-empty-inner,
+    .image-loading-inner {
+      max-width: 410px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .image-empty-orb,
+    .image-loading-orb {
+      width: 96px;
+      aspect-ratio: 1;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 34% 22%, rgba(255,255,255,.98), transparent 0 14%, rgba(255,255,255,.32) 22%, transparent 36%),
+        linear-gradient(145deg, rgba(255,178,96,.92), var(--orange), var(--orange-3));
+      box-shadow: 0 18px 45px rgba(var(--accent-rgb), .28), inset 0 0 0 1px rgba(255,255,255,.45);
+      animation: imageBreath 2.8s ease-in-out infinite;
+    }
+
+    .image-loading-orb { animation: imageBreath .9s ease-in-out infinite; }
+
+    @keyframes imageBreath {
+      50% { transform: scale(1.07) rotate(8deg); filter: saturate(1.16); }
+    }
+
+    .image-empty h3,
+    .image-loading h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .image-empty p,
+    .image-loading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .image-result img {
+      width: 100%;
+      height: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      background: rgba(255,255,255,.35);
+    }
+
+    .image-stage-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .image-action {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 12px;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .image-action.primary {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--orange), var(--orange-3));
+    }
+
+    .image-model-list,
+    .image-history-list {
+      padding: 12px;
+      overflow: auto;
+    }
+
+    .image-model-card {
+      width: 100%;
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      padding: 10px;
+      text-align: left;
+      font: inherit;
+    }
+
+    .image-model-card .model-mark {
+      width: 34px;
+      height: 34px;
+    }
+
+    .image-model-card strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .image-model-card small,
+    .image-history-card small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .image-history-card {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 10px;
+      margin-bottom: 9px;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 14px;
+      color: var(--ink);
+      background: rgba(255,255,255,.48);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .image-history-card img {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: rgba(var(--accent-rgb), .1);
+    }
+
+    .image-history-card strong {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .image-empty-note {
+      padding: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    html[data-theme="dark"] .image-panel,
+    html[data-theme="dark"] .image-stage,
+    html[data-theme="dark"] .image-side,
+    html[data-theme="dark"] .image-field textarea,
+    html[data-theme="dark"] .image-chip,
+    html[data-theme="dark"] .image-model-card,
+    html[data-theme="dark"] .image-action,
+    html[data-theme="dark"] .image-history-card,
+    html[data-theme="dark"] .image-empty,
+    html[data-theme="dark"] .image-loading,
+    html[data-theme="dark"] .image-result {
+      border-color: rgba(255,255,255,.08);
+      background: rgba(18,20,25,.84);
+      color: var(--ink);
+      box-shadow: none;
+    }
+
+    @media (max-width: 1180px) {
+      .images-workspace { grid-template-columns: 280px minmax(0, 1fr); }
+      .image-side {
+        display: flex;
+        grid-column: 1 / -1;
+        min-height: 250px;
+      }
+      .image-model-list,
+      .image-history-list { max-height: 260px; }
+    }
+
+    @media (max-width: 760px) {
+      .images-workspace {
+        grid-template-columns: 1fr;
+        overflow: auto;
+      }
+      .image-panel,
+      .image-stage {
+        min-height: auto;
+      }
+      .image-preview-wrap { padding: 12px; }
+      .image-empty,
+      .image-loading,
+      .image-result { min-height: 360px; }
+    }
+
     .split-view {
       position: fixed;
       inset: 0;
@@ -33925,6 +34386,7 @@ window.ElevenLabsClient = ElevenLabsClient;
         <nav class="top-center" aria-label="Workspace">
           <span class="workspace-indicator" aria-hidden="true"></span>
           <button id="chatWorkspaceBtn" class="nav-chip active" type="button" data-workspace="chat" aria-pressed="true"><i data-lucide="message-square"></i>Chat</button>
+          <button id="imagesWorkspaceBtn" class="nav-chip" type="button" data-workspace="images" aria-pressed="false"><i data-lucide="image"></i>VEIL Images</button>
         </nav>
         <div class="top-actions">
           <button id="modelToggle" class="icon-btn mobile-model-toggle" type="button" title="Choose model"><i data-lucide="sparkles"></i></button>
@@ -34569,6 +35031,60 @@ window.ElevenLabsClient = ElevenLabsClient;
           </footer>
         </aside>
       </main>
+
+      <main class="images-workspace workspace-view" id="veilImagesWorkspace" hidden>
+        <aside class="image-panel">
+          <header class="image-panel-head">
+            <strong>VEIL Images</strong>
+            <small>Generate premium visuals from text</small>
+          </header>
+          <form class="image-form" id="imageForm">
+            <div class="image-field">
+              <label for="imagePrompt">Prompt <span id="imagePromptCount">0</span></label>
+              <textarea id="imagePrompt" placeholder="Describe the image VEIL should create..."></textarea>
+            </div>
+            <div class="image-field">
+              <label>Style</label>
+              <div class="image-chip-grid" id="imageStyleGrid"></div>
+            </div>
+            <div class="image-field">
+              <label>Frame</label>
+              <div class="image-chip-grid" id="imageFrameGrid"></div>
+            </div>
+            <button class="image-generate" id="imageGenerateBtn" type="submit"><i data-lucide="wand-sparkles"></i>Generate Image</button>
+          </form>
+        </aside>
+
+        <section class="image-stage">
+          <header class="image-stage-head">
+            <div>
+              <h2>Visual forge</h2>
+              <p>Text to image through VEIL's cinematic image workspace.</p>
+            </div>
+            <span class="image-status-pill" id="imageStatus">Ready</span>
+          </header>
+          <div class="image-preview-wrap" id="imagePreview"></div>
+          <footer class="image-stage-actions">
+            <button class="image-action primary" id="imageDownloadBtn" type="button" disabled><i data-lucide="download"></i>Download</button>
+            <button class="image-action" id="imageCopyPromptBtn" type="button"><i data-lucide="copy"></i>Copy Prompt</button>
+            <button class="image-action" id="imageRetryBtn" type="button"><i data-lucide="refresh-cw"></i>Retry</button>
+            <button class="image-action" id="imageClearBtn" type="button"><i data-lucide="trash-2"></i>Clear</button>
+          </footer>
+        </section>
+
+        <aside class="image-side">
+          <header class="image-side-head">
+            <strong>Image Models</strong>
+            <small id="imageModelTotal">Loading models</small>
+          </header>
+          <div class="image-model-list" id="imageModelList"></div>
+          <header class="image-side-head">
+            <strong>Recent renders</strong>
+            <small id="imageHistoryTotal">0 saved</small>
+          </header>
+          <div class="image-history-list" id="imageHistoryList"></div>
+        </aside>
+      </main>
     </div>
   </div>
 
@@ -34907,6 +35423,7 @@ window.ElevenLabsClient = ElevenLabsClient;
       code: "veil_code_workspace_v1",
       design: "veil_design_workspace_v1",
       assets: "veil_assets_workspace_v1",
+      images: "veil_images_workspace_v1",
       benchmark: "veil_benchmark_workspace_v1",
       replay: "veil_project_replay_v1"
     };
@@ -35096,6 +35613,7 @@ Topic: a private AI workspace.`
     let designCompareMode = false;
     let designDrag = null;
     let assetState = read(STORE.assets, { category: "all", search: "", selectedId: "", favorites: [], uploads: [] });
+    let imageState = read(STORE.images, { prompt: "", model: "magic", style: "cinematic", frame: "square", current: null, history: [], models: [] });
     let benchmarkState = read(STORE.benchmark, null);
     let replayState = read(STORE.replay, []);
     let assetCatalog = [];
@@ -35105,6 +35623,7 @@ Topic: a private AI workspace.`
     let benchmarkPresentationStartedAt = 0;
     let benchmarkRunToken = 0;
     let splitDrag = null;
+    let imageController = null;
     const renderedCodeBlocks = new Map();
     const soundBank = {};
     const MAX_CHAT_AUTO_CONTINUES = 99;
@@ -35863,10 +36382,11 @@ button {
       openModal("codeVersions");
     }
 
-    const WORKSPACE_ORDER = ["chat", "code", "benchmark"];
+    const WORKSPACE_ORDER = ["chat", "images", "code", "benchmark"];
     let workspaceTransitionToken = 0;
 
     function workspaceView(workspace) {
+      if (workspace === "images") return $("veilImagesWorkspace");
       if (workspace === "code") return $("veilCode");
       if (workspace === "benchmark") return $("veilBenchmark");
       return $("chat");
@@ -35891,6 +36411,7 @@ button {
 
     function syncWorkspaceChrome(workspace) {
       const isChat = workspace === "chat";
+      const isImages = workspace === "images";
       const isCode = workspace === "code";
       const isBenchmark = workspace === "benchmark";
       WORKSPACE_ORDER.forEach(name => {
@@ -35901,6 +36422,7 @@ button {
         button.setAttribute("aria-pressed", String(active));
       });
       document.body.classList.toggle("code-active", isCode);
+      document.body.classList.toggle("images-active", isImages);
       document.body.classList.toggle("benchmark-active", isBenchmark);
       document.body.classList.remove("studio-active");
       document.body.classList.remove("design-active", "assets-active");
@@ -35911,9 +36433,9 @@ button {
       $("codeRail").style.removeProperty("transform");
       $("codeAgent").style.removeProperty("transform");
       $("rail").classList.remove("open");
-      $("railToggle").title = isCode ? "Open projects and files" : isBenchmark ? "Open benchmark history" : "Open history";
-      $("modelToggle").title = isCode ? "Open VEIL Code mission panel" : isBenchmark ? "Benchmark controls" : "Choose model";
-      $("shareBtn").title = isChat ? "Share chat" : isBenchmark ? "Export benchmark" : "Share VEIL project file";
+      $("railToggle").title = isCode ? "Open projects and files" : isImages ? "Open image controls" : isBenchmark ? "Open benchmark history" : "Open history";
+      $("modelToggle").title = isCode ? "Open VEIL Code mission panel" : isImages ? "Image models" : isBenchmark ? "Benchmark controls" : "Choose model";
+      $("shareBtn").title = isChat ? "Share chat" : isImages ? "Copy image prompt" : isBenchmark ? "Export benchmark" : "Share VEIL project file";
       updateWorkspaceIndicator(workspace);
     }
 
@@ -35935,6 +36457,10 @@ button {
       if (workspace === "code" && codeDesktopAvailable) {
         renderCodeWorkspace();
         setTimeout(() => monacoInstance?.focus?.() || $("codeEditor").focus(), 30);
+      } else if (workspace === "images") {
+        renderImagesWorkspace();
+        loadImageModels();
+        setTimeout(() => $("imagePrompt")?.focus(), 30);
       } else if (workspace === "benchmark") {
         ensureBenchmarkState();
         renderBenchmarkWorkspace();
@@ -35954,7 +36480,7 @@ button {
       syncWorkspaceChrome(nextWorkspace);
       currentWorkspace = nextWorkspace;
       if (!options.silentReplay && nextWorkspace !== previousWorkspace) {
-        const label = nextWorkspace === "code" ? "VEIL Code" : nextWorkspace === "benchmark" ? "Benchmark" : "Chat";
+        const label = nextWorkspace === "code" ? "VEIL Code" : nextWorkspace === "images" ? "VEIL Images" : nextWorkspace === "benchmark" ? "Benchmark" : "Chat";
         recordReplay("workspace", `Opened ${label}`, "", nextWorkspace);
       }
 
@@ -42015,6 +42541,310 @@ Design request: ${prompt}`;
       $("assetFileInput").value = "";
     }
 
+    const IMAGE_STYLE_PRESETS = [
+      { id: "cinematic", label: "Cinematic", hint: "VEIL glow", prompt: "cinematic premium lighting, soft glass glow, high detail, elegant composition" },
+      { id: "product", label: "Product", hint: "studio clean", prompt: "premium studio product render, polished surfaces, crisp reflections, clean background" },
+      { id: "editorial", label: "Editorial", hint: "campaign", prompt: "editorial campaign image, refined color grading, luxury atmosphere, strong focal point" },
+      { id: "concept", label: "Concept", hint: "imaginative", prompt: "high-end concept art, expressive composition, rich atmosphere, detailed visual language" }
+    ];
+
+    const IMAGE_FRAME_PRESETS = [
+      { id: "square", label: "Square", hint: "1:1", prompt: "square composition, balanced center framing" },
+      { id: "wide", label: "Wide", hint: "16:9", prompt: "wide cinematic composition, landscape framing" },
+      { id: "portrait", label: "Portrait", hint: "4:5", prompt: "portrait composition, vertical poster framing" },
+      { id: "wallpaper", label: "Wallpaper", hint: "desktop", prompt: "wide desktop wallpaper composition, room for interface overlays" }
+    ];
+
+    const FALLBACK_IMAGE_MODELS = [
+      { model: "magic", provider: "MagicStudio", notes: "Most reliable VEIL image route" },
+      { model: "turbo", provider: "MitraAi", notes: "Fast general image route" },
+      { model: "flux", provider: "MitraAi", notes: "Detailed image route" },
+      { model: "flux-schnell", provider: "MitraAi", notes: "Fast Flux route" },
+      { model: "wan", provider: "Qwen.ai", notes: "Experimental visual route" }
+    ];
+
+    function saveImageState() {
+      try { localStorage.setItem(STORE.images, JSON.stringify(imageState)); } catch {}
+    }
+
+    function imageModels() {
+      const models = Array.isArray(imageState.models) && imageState.models.length ? imageState.models : FALLBACK_IMAGE_MODELS;
+      return models.filter(model => model?.model);
+    }
+
+    function imageModelName(model) {
+      const raw = typeof model === "string" ? model : model?.model || "magic";
+      return raw.split("-").map(part => part ? part[0].toUpperCase() + part.slice(1) : part).join(" ");
+    }
+
+    function imageProxyUrl(url) {
+      return `${API_BASE}/api/images?url=${encodeURIComponent(url)}`;
+    }
+
+    function selectedImageStyle() {
+      return IMAGE_STYLE_PRESETS.find(style => style.id === imageState.style) || IMAGE_STYLE_PRESETS[0];
+    }
+
+    function selectedImageFrame() {
+      return IMAGE_FRAME_PRESETS.find(frame => frame.id === imageState.frame) || IMAGE_FRAME_PRESETS[0];
+    }
+
+    function selectedImageModel() {
+      const models = imageModels();
+      if (!models.some(model => model.model === imageState.model)) imageState.model = models[0]?.model || "magic";
+      return models.find(model => model.model === imageState.model) || FALLBACK_IMAGE_MODELS[0];
+    }
+
+    function imageFinalPrompt() {
+      const prompt = ($("imagePrompt")?.value || imageState.prompt || "").trim();
+      const style = selectedImageStyle();
+      const frame = selectedImageFrame();
+      return [prompt, style.prompt, frame.prompt, "premium finished image, polished detail, no text artifacts"].filter(Boolean).join(". ");
+    }
+
+    function imageEmptyMarkup(title = "Ready to generate", body = "Describe a visual, choose a style, and VEIL Images will create a polished render.") {
+      return `
+        <div class="image-empty">
+          <div class="image-empty-inner">
+            <div class="image-empty-orb"></div>
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </div>`;
+    }
+
+    function imageLoadingMarkup(message) {
+      return `
+        <div class="image-loading">
+          <div class="image-loading-inner">
+            <div class="image-loading-orb"></div>
+            <h3>Generating image</h3>
+            <p>${escapeHtml(message || "VEIL is talking to the image model...")}</p>
+          </div>
+        </div>`;
+    }
+
+    function renderImagesWorkspace() {
+      imageState = imageState && typeof imageState === "object" ? imageState : {};
+      imageState.prompt = imageState.prompt || "";
+      imageState.model = imageState.model || "magic";
+      imageState.style = imageState.style || "cinematic";
+      imageState.frame = imageState.frame || "square";
+      imageState.history = Array.isArray(imageState.history) ? imageState.history : [];
+      imageState.models = Array.isArray(imageState.models) ? imageState.models : [];
+
+      const prompt = $("imagePrompt");
+      if (prompt && document.activeElement !== prompt) prompt.value = imageState.prompt;
+      if ($("imagePromptCount")) $("imagePromptCount").textContent = `${(prompt?.value || imageState.prompt).length}`;
+
+      $("imageStyleGrid").innerHTML = IMAGE_STYLE_PRESETS.map(style => `
+        <button class="image-chip ${style.id === imageState.style ? "active" : ""}" type="button" data-image-style="${escapeHtml(style.id)}">
+          ${escapeHtml(style.label)}<small>${escapeHtml(style.hint)}</small>
+        </button>`).join("");
+
+      $("imageFrameGrid").innerHTML = IMAGE_FRAME_PRESETS.map(frame => `
+        <button class="image-chip ${frame.id === imageState.frame ? "active" : ""}" type="button" data-image-frame="${escapeHtml(frame.id)}">
+          ${escapeHtml(frame.label)}<small>${escapeHtml(frame.hint)}</small>
+        </button>`).join("");
+
+      const models = imageModels();
+      selectedImageModel();
+      $("imageModelTotal").textContent = `${models.length} model${models.length === 1 ? "" : "s"}`;
+      $("imageModelList").innerHTML = models.map(model => `
+        <button class="image-model-card ${model.model === imageState.model ? "active" : ""}" type="button" data-image-model="${escapeHtml(model.model)}">
+          ${modelMark({ name: model.model === "magic" ? "VEIL Prism" : "VEIL Forge" }, "mini")}
+          <span><strong>${escapeHtml(imageModelName(model))}</strong><small>${escapeHtml(model.provider || "VEIL image")}</small></span>
+          <small>${model.model === "magic" ? "stable" : "image"}</small>
+        </button>`).join("");
+
+      $("imageHistoryTotal").textContent = `${imageState.history.length} saved`;
+      $("imageHistoryList").innerHTML = imageState.history.length ? imageState.history.map(item => `
+        <button class="image-history-card" type="button" data-image-history="${escapeHtml(item.id)}">
+          <img alt="" src="${escapeHtml(imageProxyUrl(item.imageUrl))}" loading="lazy">
+          <span><strong>${escapeHtml(item.prompt || "VEIL image")}</strong><small>${escapeHtml(imageModelName(item.model || "magic"))} - ${new Date(item.created || now()).toLocaleString()}</small></span>
+        </button>`).join("") : `<div class="image-empty-note">Generated images will stay here in this browser so you can reopen or download them later.</div>`;
+
+      const current = imageState.current;
+      if (!current) {
+        $("imageStatus").textContent = "Ready";
+        $("imagePreview").innerHTML = imageEmptyMarkup();
+      } else if (current.status === "loading") {
+        $("imageStatus").textContent = "Generating";
+        $("imagePreview").innerHTML = imageLoadingMarkup(current.message);
+      } else if (current.status === "error") {
+        $("imageStatus").textContent = "Could not generate";
+        $("imagePreview").innerHTML = imageEmptyMarkup("Generation failed", current.message || "The image service did not return an image. Try another model or shorter prompt.");
+      } else if (current.imageUrl) {
+        $("imageStatus").textContent = "Image ready";
+        $("imagePreview").innerHTML = `<div class="image-result"><img alt="${escapeHtml(current.prompt || "Generated VEIL image")}" src="${escapeHtml(imageProxyUrl(current.imageUrl))}"></div>`;
+      } else {
+        $("imageStatus").textContent = "Ready";
+        $("imagePreview").innerHTML = imageEmptyMarkup();
+      }
+
+      $("imageGenerateBtn").disabled = Boolean(imageController);
+      $("imageDownloadBtn").disabled = !imageState.current?.imageUrl;
+      saveImageState();
+      lucide.createIcons();
+    }
+
+    async function loadImageModels(force = false) {
+      if (!force && Array.isArray(imageState.models) && imageState.models.length) {
+        renderImagesWorkspace();
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE}/api/images`, { headers: { accept: "application/json" } });
+        if (!response.ok) throw new Error(`Model list failed (${response.status})`);
+        const data = await response.json();
+        if (!data?.success || !Array.isArray(data.models)) throw new Error("Invalid image model list");
+        imageState.models = data.models.filter(model => model?.model);
+        if (!imageState.models.some(model => model.model === imageState.model)) imageState.model = imageState.models.find(model => model.model === "magic")?.model || imageState.models[0]?.model || "magic";
+        saveImageState();
+      } catch (error) {
+        imageState.models = Array.isArray(imageState.models) && imageState.models.length ? imageState.models : FALLBACK_IMAGE_MODELS;
+        toast("VEIL Images is using cached model routes.");
+      }
+      renderImagesWorkspace();
+    }
+
+    function parseImageSse(buffer, onEvent) {
+      const chunks = buffer.split(/\n\n+/);
+      const rest = chunks.pop() || "";
+      chunks.forEach(chunk => {
+        chunk.split(/\n/).forEach(line => {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("data:")) return;
+          const json = trimmed.slice(5).trim();
+          if (!json || json === "[DONE]") return;
+          try { onEvent(JSON.parse(json)); } catch {}
+        });
+      });
+      return rest;
+    }
+
+    async function generateImage() {
+      if (imageController) return;
+      const prompt = ($("imagePrompt").value || "").trim();
+      if (!prompt) {
+        $("imagePrompt").focus();
+        toast("Describe the image first.");
+        return;
+      }
+      imageState.prompt = prompt;
+      const model = selectedImageModel();
+      const finalPrompt = imageFinalPrompt();
+      imageController = new AbortController();
+      imageState.current = {
+        id: uid(),
+        status: "loading",
+        prompt,
+        finalPrompt,
+        model: model.model,
+        message: "Starting image generation...",
+        created: now()
+      };
+      renderImagesWorkspace();
+      recordReplay("asset", "Started VEIL Images render", imageModelName(model), "images");
+
+      try {
+        const response = await fetch(`${API_BASE}/api/images`, {
+          method: "POST",
+          headers: { accept: "text/event-stream", "content-type": "application/json" },
+          body: JSON.stringify({ prompt: finalPrompt, model: model.model }),
+          signal: imageController.signal
+        });
+        if (!response.ok) {
+          const errorText = await response.text().catch(() => "");
+          throw new Error(errorText || `Image generation failed (${response.status})`);
+        }
+        if (!response.body) throw new Error("The image service did not return a stream.");
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let completed = false;
+        const handleEvent = event => {
+          if (event.status === "processing") {
+            imageState.current.message = event.message || "Generating image...";
+            renderImagesWorkspace();
+          }
+          if (event.status === "error" || event.success === false) {
+            throw new Error(event.error || event.message || "The image model could not create this render.");
+          }
+          if (event.status === "complete" || event.imageUrl) {
+            const result = {
+              id: event.id || imageState.current.id || uid(),
+              status: "complete",
+              prompt,
+              finalPrompt,
+              model: event.model || model.model,
+              imageUrl: event.imageUrl,
+              created: now()
+            };
+            imageState.current = result;
+            imageState.history = [result, ...imageState.history.filter(item => item.imageUrl !== result.imageUrl)].slice(0, 30);
+            completed = true;
+            saveImageState();
+            renderImagesWorkspace();
+          }
+        };
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          buffer = parseImageSse(buffer, handleEvent);
+        }
+        parseImageSse(`${buffer}\n\n`, handleEvent);
+        if (!completed || !imageState.current?.imageUrl) throw new Error("The image service finished without returning an image.");
+        recordReplay("asset", "Generated VEIL image", prompt.slice(0, 80), "images", { imageId: imageState.current.id });
+        toast("Image generated.");
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        imageState.current = {
+          id: uid(),
+          status: "error",
+          prompt,
+          finalPrompt,
+          model: model.model,
+          message: error?.message || "VEIL Images could not create this render.",
+          created: now()
+        };
+        saveImageState();
+        renderImagesWorkspace();
+        toast("Could not generate image.");
+      } finally {
+        imageController = null;
+        renderImagesWorkspace();
+      }
+    }
+
+    async function downloadCurrentImage() {
+      const current = imageState.current;
+      if (!current?.imageUrl) return toast("No generated image to download yet.");
+      try {
+        const response = await fetch(imageProxyUrl(current.imageUrl));
+        if (!response.ok) throw new Error("Download failed");
+        const blob = await response.blob();
+        const extension = (blob.type || "image/png").includes("jpeg") ? "jpg" : "png";
+        downloadBlob(blob, `veil-image-${current.id || Date.now()}.${extension}`);
+      } catch {
+        window.open(current.imageUrl, "_blank", "noopener,noreferrer");
+      }
+    }
+
+    function copyImagePrompt() {
+      const prompt = imageState.current?.finalPrompt || $("imagePrompt")?.value || imageState.prompt || "";
+      if (!prompt.trim()) return toast("No image prompt to copy.");
+      copy(prompt);
+    }
+
+    function clearImageRender() {
+      imageState.current = null;
+      saveImageState();
+      renderImagesWorkspace();
+    }
+
     function recordReplay(type, title, detail = "", workspace = currentWorkspace, data = {}) {
       replayState = Array.isArray(replayState) ? replayState : [];
       replayState.push({ id: uid(), time: now(), type, title, detail, workspace, data });
@@ -42060,7 +42890,7 @@ Design request: ${prompt}`;
     function renderSplitNav(side, workspace) {
       const nav = document.querySelector(`[data-split-nav="${side}"]`);
       if (!nav) return;
-      nav.innerHTML = WORKSPACE_ORDER.map(name => `<button class="${name === workspace ? "active" : ""}" type="button" data-split-side="${side}" data-split-workspace="${name}">${name === "code" ? "Code" : name === "benchmark" ? "Benchmark" : "Chat"}</button>`).join("");
+      nav.innerHTML = WORKSPACE_ORDER.map(name => `<button class="${name === workspace ? "active" : ""}" type="button" data-split-side="${side}" data-split-workspace="${name}">${name === "code" ? "Code" : name === "images" ? "Images" : name === "benchmark" ? "Benchmark" : "Chat"}</button>`).join("");
     }
 
     function setSplitPane(side, workspace) {
@@ -43514,6 +44344,8 @@ User: ${userText}`;
       } else if (currentWorkspace === "design") {
         $("veilDesignWorkspace").classList.toggle("design-projects-open");
         $("veilDesignWorkspace").classList.remove("design-inspector-open");
+      } else if (currentWorkspace === "images") {
+        $("imagePrompt").focus();
       } else {
         $("rail").classList.toggle("open");
       }
@@ -43534,6 +44366,11 @@ User: ${userText}`;
         $("veilDesignWorkspace").classList.remove("design-projects-open");
         return;
       }
+      if (currentWorkspace === "images") {
+        $("imageModelList").scrollIntoView({ behavior: settings.reduceMotion ? "auto" : "smooth", block: "nearest" });
+        loadImageModels(true);
+        return;
+      }
       $("rail").classList.remove("open");
       document.body.classList.add("models-open");
       setTimeout(() => $("modelSearch").focus(), 80);
@@ -43542,6 +44379,7 @@ User: ${userText}`;
     $("modelScrim").addEventListener("click", () => document.body.classList.remove("models-open"));
     $("shareBtn").addEventListener("click", () => {
       if (currentWorkspace === "chat") return shareChat();
+      if (currentWorkspace === "images") return copyImagePrompt();
       if (currentWorkspace === "design") return exportVeilDesignFile();
       if (currentWorkspace === "assets") return copy(assetCodePayload(assetById()));
       return shareCodeProjectFile();
@@ -43699,6 +44537,46 @@ User: ${userText}`;
       copy(assetCodePayload(asset));
       toast(`${asset.name} copied.`);
     });
+    $("imageForm").addEventListener("submit", event => {
+      event.preventDefault();
+      generateImage();
+    });
+    $("imagePrompt").addEventListener("input", event => {
+      imageState.prompt = event.target.value;
+      $("imagePromptCount").textContent = `${event.target.value.length}`;
+      saveImageState();
+    });
+    $("imageStyleGrid").addEventListener("click", event => {
+      const button = event.target.closest("[data-image-style]");
+      if (!button) return;
+      imageState.style = button.dataset.imageStyle;
+      renderImagesWorkspace();
+    });
+    $("imageFrameGrid").addEventListener("click", event => {
+      const button = event.target.closest("[data-image-frame]");
+      if (!button) return;
+      imageState.frame = button.dataset.imageFrame;
+      renderImagesWorkspace();
+    });
+    $("imageModelList").addEventListener("click", event => {
+      const button = event.target.closest("[data-image-model]");
+      if (!button) return;
+      imageState.model = button.dataset.imageModel;
+      renderImagesWorkspace();
+      toast(`${imageModelName(imageState.model)} selected.`);
+    });
+    $("imageHistoryList").addEventListener("click", event => {
+      const button = event.target.closest("[data-image-history]");
+      if (!button) return;
+      const item = imageState.history.find(history => history.id === button.dataset.imageHistory);
+      if (!item) return;
+      imageState.current = item;
+      renderImagesWorkspace();
+    });
+    $("imageDownloadBtn").addEventListener("click", downloadCurrentImage);
+    $("imageCopyPromptBtn").addEventListener("click", copyImagePrompt);
+    $("imageRetryBtn").addEventListener("click", generateImage);
+    $("imageClearBtn").addEventListener("click", clearImageRender);
     $("benchmarkSearch").addEventListener("input", event => {
       const state = ensureBenchmarkState();
       state.query = event.target.value;
@@ -44005,6 +44883,8 @@ User: ${userText}`;
           $("codeAgent").classList.add("open");
           $("codeAgent").style.setProperty("transform", "translateX(0)", "important");
           $("codePrompt").focus();
+        } else if (currentWorkspace === "images") {
+          $("imagePrompt").focus();
         } else if (currentWorkspace === "studio") {
           $("veilStudioTask").focus();
         } else if (currentWorkspace === "design") {
@@ -44016,6 +44896,12 @@ User: ${userText}`;
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "n") {
         event.preventDefault();
         if (currentWorkspace === "code") createNewCodeThread();
+        else if (currentWorkspace === "images") {
+          imageState.prompt = "";
+          imageState.current = null;
+          renderImagesWorkspace();
+          $("imagePrompt").focus();
+        }
         else if (currentWorkspace === "studio") {
           studioState().task = "";
           studioState().results = [];
@@ -44112,6 +44998,7 @@ User: ${userText}`;
       saveCodeState();
       saveDesignState();
       saveAssetState();
+      saveImageState();
       saveBenchmarkState();
       voiceConversation?.endSession().catch(() => {});
       if (codeProject()?.dirty) {
@@ -44131,6 +45018,7 @@ User: ${userText}`;
       ensureDesignState();
       ensureBenchmarkState();
       buildAssetCatalog();
+      renderImagesWorkspace();
       if (location.hash.startsWith("#share=")) {
         $("importText").value = location.href;
         openModal("import");
